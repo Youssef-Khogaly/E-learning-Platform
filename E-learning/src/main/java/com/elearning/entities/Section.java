@@ -1,0 +1,26 @@
+package com.elearning.entities;
+
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.HashSet;
+import java.util.Set;
+
+@Entity
+@Getter
+@Setter
+@Table(name = "section")
+public class Section {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+    private Integer index;
+    @JoinColumn(name = "courseId",nullable = false)
+    @ManyToOne(optional = false)
+    private Course course;
+    private String title;
+
+    @OneToMany(mappedBy = "section")
+    private Set<Lesson> lessonSet = new HashSet<>();
+}
