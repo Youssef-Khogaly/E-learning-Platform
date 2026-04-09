@@ -1,6 +1,7 @@
 package com.elearning.Sections;
 
 import com.elearning.Sections.Requests.SectionPostRequest;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ public class SectionController {
         return ResponseEntity.ok().build();
     }
     @PostMapping("/{courseId}/sections")
-    public ResponseEntity<Void>createSection(@PathVariable @NotNull @Range(min = 1) Long courseId , @RequestBody SectionPostRequest request){
+    public ResponseEntity<Void>createSection(@PathVariable @NotNull @Range(min = 1) Long courseId , @Valid @NotNull @RequestBody SectionPostRequest request){
         return ResponseEntity.ok().build();
     }
     @PutMapping("/{courseId}/sections/{sectionId}")
