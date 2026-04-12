@@ -1,12 +1,10 @@
 package com.elearning.entities;
 
-import org.apache.commons.lang3.StringEscapeUtils;
-
-public enum CourseStatus {
+public enum LessonStatus {
     DRAFT("DRAFT"),PUBLISHED("PUBLISHED"),UNPUBLISHED("UNPUBLISHED") , ARCHIVED("ARCHIVED") ; // soft delete
     private String str;
 
-    CourseStatus(String str) {
+    LessonStatus(String str) {
         this.str = str;
     }
 

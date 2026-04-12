@@ -25,4 +25,7 @@ public class UserEnrollmentService implements IUserEnrollmentService{
         var pageReq = PageRequest.of(page,size,sort);
         return enrollmentJpaRepo.findAllByUser_Id(usrId,pageReq);
     }
+    public boolean isCourseHasAnyEnroll(Long courseId){
+        return enrollmentJpaRepo.hasAnyEnroll(courseId);
+    }
 }

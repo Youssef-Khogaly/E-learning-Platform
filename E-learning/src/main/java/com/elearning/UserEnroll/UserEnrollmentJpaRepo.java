@@ -12,4 +12,6 @@ public interface UserEnrollmentJpaRepo extends JpaRepository<UserEnrollment,Long
     boolean isEnrolled(Long usrId , Long courseId);
 
     Page<UserEnrollment> findAllByUser_Id(Long userId , Pageable pageable);
+    @Query("select exists (select 1 from UserEnrollment  r where r.course.id = : courseId)")
+    boolean hasAnyEnroll(Long courseId);
 }

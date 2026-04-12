@@ -14,7 +14,7 @@ import java.util.Set;
 public class Section {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
     private Integer index;
     @JoinColumn(name = "courseId",nullable = false)
     @ManyToOne(optional = false)
@@ -23,4 +23,8 @@ public class Section {
 
     @OneToMany(mappedBy = "section")
     private Set<Lesson> lessonSet = new HashSet<>();
+
+
+
+
 }

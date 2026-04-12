@@ -38,8 +38,8 @@ public class CourseController {
     public ResponseEntity<Page<CourseDTO>>getCourses(
             @RequestParam(value = "p",required = false,defaultValue = "0")
             @Positive Integer page
-            , @RequestParam(value = "s",required = false , defaultValue = "20") @Range(min = 20,max = 50) Integer size
-            , @RequestParam(value = "sortBy" , defaultValue =  "price") EnCourseSortBy sortBy
+            ,@RequestParam(value = "s",required = false , defaultValue = "20") @Range(min = 20,max = 50) Integer size
+            ,@RequestParam(value = "sortBy" , defaultValue =  "price") EnCourseSortBy sortBy
             , @RequestParam(value = "direction" , defaultValue = "DES") EnSortDir dir
     ){
         var ret = courseService.findAll(CourseStatus.PUBLISHED,size,page,sortBy,dir).map(courseDtoMapper::form);

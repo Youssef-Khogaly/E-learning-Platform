@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.Instant;
 import java.util.Objects;
 
 @Entity
@@ -23,8 +24,9 @@ public class Lesson {
     private LessonType type;
     private String title;
     private String text;
-
-
+    private LessonStatus status;
+    private Instant last_published_timeStamp;
+    private Instant last_unpublished_timeStamp;
     @OneToOne
     @JoinColumn(name = "videoId")
     private Video video;
