@@ -1,7 +1,5 @@
 package com.elearning.UserEnroll;
 
-import com.elearning.Courses.CourseDTO;
-import com.elearning.Courses.EnCourseSortBy;
 import com.elearning.Videos.EnSortDir;
 import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;

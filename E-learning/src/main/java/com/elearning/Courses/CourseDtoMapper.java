@@ -1,7 +1,6 @@
 package com.elearning.Courses;
 
 import com.elearning.Users.UserDtoMappers;
-import com.elearning.entities.Course;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 

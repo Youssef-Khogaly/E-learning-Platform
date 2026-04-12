@@ -1,13 +1,13 @@
-package com.elearning.entities;
+package com.elearning.Courses;
 
 import com.elearning.entities.users.User;
 import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.Setter;
+
+import java.util.Objects;
 
 @Entity
 @Getter
-@Setter
 @Table(name = "course")
 public class Course {
     @Id
@@ -21,5 +21,11 @@ public class Course {
     private String title;
     private String desc;
     private Long price;
-    private CourseStatus status;
+    private CourseState state;
+
+    protected void setState(CourseState state){
+        Objects.requireNonNull(state);
+        this.state = state;
+    }
+
 }

@@ -1,14 +1,7 @@
 package com.elearning.Courses;
 
-import com.elearning.Courses.Requests.CoursePostRequest;
-import com.elearning.Courses.Requests.CoursePutRequest;
-import com.elearning.Exceptions.NotFoundException;
 import com.elearning.Users.UserJpaRepo;
 import com.elearning.Videos.EnSortDir;
-import com.elearning.Videos.EnVideoSortBy;
-import com.elearning.entities.Course;
-import com.elearning.entities.CourseStatus;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
@@ -17,9 +10,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.net.URI;
-import java.net.URISyntaxException;
 
 @RestController
 @RequestMapping("/courses")
@@ -31,7 +21,7 @@ public class CourseController {
     private final UserJpaRepo userJpaRepo;
     @GetMapping("/{courseId}")
     public ResponseEntity<CourseDTO>getCourse(@PathVariable @NotNull @Range(min = 1) Long courseId){
-        var course = courseService.findById(courseId,CourseStatus.PUBLISHED);
+        var course = courseService.findById(courseId, CourseState.PUBLISHED);
         return ResponseEntity.ok(courseDtoMapper.form(course));
     }
     @GetMapping
@@ -42,7 +32,7 @@ public class CourseController {
             ,@RequestParam(value = "sortBy" , defaultValue =  "price") EnCourseSortBy sortBy
             , @RequestParam(value = "direction" , defaultValue = "DES") EnSortDir dir
     ){
-        var ret = courseService.findAll(CourseStatus.PUBLISHED,size,page,sortBy,dir).map(courseDtoMapper::form);
+        var ret = courseService.findAll(CourseState.PUBLISHED,size,page,sortBy,dir).map(courseDtoMapper::form);
         return ResponseEntity.ok(ret);
     }
 

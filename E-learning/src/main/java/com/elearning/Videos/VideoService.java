@@ -7,21 +7,14 @@ import com.elearning.VideoExternalService.ApiVideoUtils;
 import com.elearning.VideoExternalService.Dtos.UploadTokenDto;
 import com.elearning.VideoExternalService.Exceptions.ApiVideoNotFoundException;
 import com.elearning.Videos.Requests.VideoUpdatePayload;
-import com.elearning.entities.Course;
-import com.elearning.entities.users.User;
-import com.elearning.entities.users.UserRoles;
 import com.elearning.entities.video.Video;
 import com.elearning.entities.video.VideoAssets;
 import lombok.AllArgsConstructor;
-import org.aspectj.weaver.ast.Not;
-import org.hibernate.query.Order;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
-import java.util.Collections;
-import java.util.concurrent.CompletableFuture;
 
 
 @Service
