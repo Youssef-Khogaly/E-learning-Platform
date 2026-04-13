@@ -4,6 +4,7 @@ import com.elearning.entities.users.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 
+import java.time.Instant;
 import java.util.Objects;
 
 @Entity
@@ -22,6 +23,36 @@ public class Course {
     private String desc;
     private Long price;
     private CourseState state;
+    private Instant publishedAt;
+    private Instant unPublishedAt;
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setInstructor(User instructor) {
+        this.instructor = instructor;
+    }
+
+    public void setDesc(String desc) {
+        this.desc = desc;
+    }
+
+    public void setPrice(Long price) {
+        this.price = price;
+    }
+
+    protected void setPublishedAt(Instant lastPublishTimeStamp) {
+        this.publishedAt = lastPublishTimeStamp;
+    }
+
+    protected void setUnPublishedAt(Instant lastUnPublishTimeStamp) {
+        this.unPublishedAt = lastUnPublishTimeStamp;
+    }
 
     protected void setState(CourseState state){
         Objects.requireNonNull(state);

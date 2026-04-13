@@ -26,7 +26,7 @@ public class CourseService {
         return  courseJpaRepo.findAllByStatus(CourseState.PUBLISHED,pageable);
     }
 
-    public Page<Course> findAllforInstructor(Long inst_id,int size , int page , EnCourseSortBy sortBy , EnSortDir sortDir){
+    public Page<Course> findAllForInstructor(Long inst_id,int size , int page , EnCourseSortBy sortBy , EnSortDir sortDir){
         var sort = Sort.by(sortDir.toDirection(),sortBy.toString());
         var pageable = PageRequest.of(page,size,sort);
         return  courseJpaRepo.findAllByInstructor_Id(inst_id,pageable);
