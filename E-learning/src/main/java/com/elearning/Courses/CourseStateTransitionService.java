@@ -38,7 +38,11 @@ public class CourseStateTransitionService {
     }
     public Course unPublishCourse(Course course){
         var currState = course.getState();
-        if(currState == CourseState.UNPUBLISHED || currState == CourseState.ARCHIVED || currState == CourseState.DRAFT)
+        if(currState == CourseState.UNPUBLISHED)
+        {
+            throw new UnAllowedStateTransitionException("Course is already un published");
+        }
+        else if (currState == CourseState.DRAFT)
         {
             throw new UnAllowedStateTransitionException("can not unpublish archived or draft or  already unpublished course");
         }
@@ -50,28 +54,7 @@ public class CourseStateTransitionService {
 
         return course;
     }
-    public Course archiveCourse(Course course){
-        var currState = course.getState();
 
-        if(currState == CourseState.DRAFT)
-            throw new UnAllowedStateTransitionException("can not archive draft course, you can delete it");
-        else if(currState == CourseState.PUBLISHED)
-            throw new UnAllowedStateTransitionException("can not archive  published course, unpublish it first");
-        else if (currState == CourseState.ARCHIVED)
-            throw new UnAllowedStateTransitionException("course is already archived");
-        else if (currState == CourseState.UNPUBLISHED)
-        {
-            course.setUnPublishedAt(Instant.now());
-            course.setState(CourseState.ARCHIVED);
-        }
-
-        return course;
-    }
-    public Course archiveCourse(Long courseId){
-        var course = courseService.findById(courseId);
-
-        return archiveCourse(course);
-    }
 
 
 }

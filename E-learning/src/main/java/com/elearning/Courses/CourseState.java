@@ -1,7 +1,7 @@
 package com.elearning.Courses;
 
 public enum CourseState {
-    DRAFT("DRAFT"),PUBLISHED("PUBLISHED"),UNPUBLISHED("UNPUBLISHED") , ARCHIVED("ARCHIVED") ; // soft delete
+    DRAFT("DRAFT"),PUBLISHED("PUBLISHED"),UNPUBLISHED("UNPUBLISHED")  ;
     private String str;
 
     CourseState(String str) {

@@ -16,7 +16,7 @@ public class CourseDtoMapper {
         Objects.requireNonNull(course.getInstructor());
 
         return CourseDTO.builder().id(course.getId()).title(course.getTitle())
-                .desc(course.getDesc()).status(course.getStatus()).price(course.getPrice())
+                .desc(course.getDesc()).status(course.getState()).price(course.getPrice())
                 .instructor(userDtoMappers.form(course.getInstructor())).build();
     }
 }
