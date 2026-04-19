@@ -1,8 +1,12 @@
 package com.elearning.Courses.Controller;
 
 import com.elearning.Courses.*;
+import com.elearning.Courses.Requests.CoursePostRequest;
+import com.elearning.Courses.Requests.CoursePutRequest;
 import com.elearning.Users.UserJpaRepo;
 import com.elearning.Videos.EnSortDir;
+import com.elearning.entities.users.User;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
@@ -11,6 +15,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
 
 @RestController
 @RequestMapping("/courses")
@@ -19,8 +26,6 @@ import org.springframework.web.bind.annotation.*;
 public class CourseController {
     private final CourseService courseService;
     private final CourseDtoMapper courseDtoMapper;
-    private final UserJpaRepo userJpaRepo;
-
     // student api
     @GetMapping("/{courseId}")
     public ResponseEntity<CourseDTO>getCourse(@PathVariable @NotNull @Range(min = 1) Long courseId){
@@ -54,5 +59,36 @@ public class CourseController {
         return ResponseEntity.ok(ret);
     }
 
+    @PostMapping("/{id}")
+    public ResponseEntity<Void> createCourse(@Valid CoursePostRequest coursePostRequest, @PathVariable @NotNull @Positive Long id)
+    {
+        var course = courseService.create(coursePostRequest.title(),coursePostRequest.desc(),coursePostRequest.price());
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri()
+                .path("/{id}").buildAndExpand(course.getId()).toUri();
+        return ResponseEntity.created(uri).build();
+    }
+    @PutMapping("/{id}")
+    public ResponseEntity<CourseDTO> updateCourse(@Valid CoursePutRequest coursePutRequest, @PathVariable @NotNull @Positive Long id)
+    {
+        var course = courseService.findById(id);
+        course.setPrice(coursePutRequest.price());
+        course.setDesc(coursePutRequest.desc());
+        course.setTitle(coursePutRequest.title());
+        var dto = courseDtoMapper.form(courseService.save(course));
+        return ResponseEntity.ok(dto);
+    }
+
+    @PutMapping("/{id}/publish")
+    public ResponseEntity<Void>publishCourse(@PathVariable @NotNull @Positive Long id)
+    {
+        courseService.updateState(id,CourseState.PUBLISHED);
+        return ResponseEntity.ok().build();
+    }
+    @PutMapping("/{id}/unPublish")
+    public ResponseEntity<Void>unPublishCourse(@PathVariable @NotNull @Positive Long id)
+    {
+        courseService.updateState(id,CourseState.UNPUBLISHED);
+        return ResponseEntity.ok().build();
+    }
 
 }

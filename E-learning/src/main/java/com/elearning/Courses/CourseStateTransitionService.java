@@ -2,8 +2,10 @@ package com.elearning.Courses;
 
 import com.elearning.Courses.Repo.CourseJpaRepo;
 import com.elearning.Exceptions.UnAllowedStateTransitionException;
+import com.elearning.UserEnroll.IUserEnrollmentService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 
@@ -13,7 +15,8 @@ public class CourseStateTransitionService {
 
     private final CourseJpaRepo courseJpaRepo;
     private final CourseService courseService;
-
+    private final IUserEnrollmentService userEnrollmentService;
+    @Transactional
     public Course publishCourse(Long courseId){
 
         var course = courseService.findById(courseId);
@@ -32,6 +35,7 @@ public class CourseStateTransitionService {
 
         return course;
     }
+    @Transactional
     public Course unPublishCourse(Long courseId){
         var course = courseService.findById(courseId);
 
@@ -55,7 +59,5 @@ public class CourseStateTransitionService {
 
         return course;
     }
-
-
 
 }

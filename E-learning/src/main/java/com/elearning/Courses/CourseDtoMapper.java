@@ -17,6 +17,6 @@ public class CourseDtoMapper {
 
         return CourseDTO.builder().id(course.getId()).title(course.getTitle())
                 .desc(course.getDesc()).status(course.getState()).price(course.getPrice())
-                .instructor(userDtoMappers.form(course.getInstructor())).build();
+                .instructor(userDtoMappers.form(course.getInstructor())).publishedAt(course.getPublishedAt()).build();
     }
 }
