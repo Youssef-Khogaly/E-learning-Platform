@@ -1,5 +1,6 @@
-package com.elearning.Courses;
+package com.elearning.Courses.Controller;
 
+import com.elearning.Courses.*;
 import com.elearning.Users.UserJpaRepo;
 import com.elearning.Videos.EnSortDir;
 import jakarta.validation.constraints.NotNull;
@@ -24,6 +25,7 @@ public class CourseController {
     @GetMapping("/{courseId}")
     public ResponseEntity<CourseDTO>getCourse(@PathVariable @NotNull @Range(min = 1) Long courseId){
         var course = courseService.findById(courseId, CourseState.PUBLISHED);
+
         return ResponseEntity.ok(courseDtoMapper.form(course));
     }
     // student api

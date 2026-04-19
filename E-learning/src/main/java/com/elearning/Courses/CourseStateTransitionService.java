@@ -1,5 +1,6 @@
 package com.elearning.Courses;
 
+import com.elearning.Courses.Repo.CourseJpaRepo;
 import com.elearning.Exceptions.UnAllowedStateTransitionException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;

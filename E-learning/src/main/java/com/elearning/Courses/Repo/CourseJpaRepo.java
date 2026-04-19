@@ -1,5 +1,7 @@
-package com.elearning.Courses;
+package com.elearning.Courses.Repo;
 
+import com.elearning.Courses.Course;
+import com.elearning.Courses.CourseState;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

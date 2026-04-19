@@ -1,6 +1,6 @@
 package com.elearning.Sections;
 
-import com.elearning.Courses.CourseJpaRepo;
+import com.elearning.Courses.Repo.CourseJpaRepo;
 import com.elearning.Courses.CourseService;
 import com.elearning.Exceptions.BadRequestException;
 import com.elearning.Exceptions.NotAllowedOperation;
