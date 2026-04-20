@@ -1,6 +1,6 @@
 package com.elearning.entities.video;
 
-import com.elearning.entities.Lesson;
+import com.elearning.Lessons.Lesson;
 import com.elearning.entities.users.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.hypersistence.utils.hibernate.type.json.JsonType;

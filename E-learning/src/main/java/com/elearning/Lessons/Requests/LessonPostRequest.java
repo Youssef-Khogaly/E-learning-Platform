@@ -1,6 +1,6 @@
 package com.elearning.Lessons.Requests;
 
-import com.elearning.entities.LessonType;
+import com.elearning.Lessons.LessonType;
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

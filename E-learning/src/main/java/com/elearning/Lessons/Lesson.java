@@ -1,5 +1,6 @@
-package com.elearning.entities;
+package com.elearning.Lessons;
 
+import com.elearning.entities.Section;
 import com.elearning.entities.video.Video;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -23,13 +24,11 @@ public class Lesson {
     @Enumerated(EnumType.STRING)
     private LessonType type;
     private String title;
-    private String text;
+
     private LessonStatus status;
     private Instant last_published_timeStamp;
     private Instant last_unpublished_timeStamp;
-    @OneToOne
-    @JoinColumn(name = "videoId")
-    private Video video;
+
     private Boolean isPreview;
 
     @Override

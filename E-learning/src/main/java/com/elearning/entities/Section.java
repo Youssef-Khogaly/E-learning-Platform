@@ -1,6 +1,7 @@
 package com.elearning.entities;
 
 import com.elearning.Courses.Course;
+import com.elearning.Lessons.Lesson;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

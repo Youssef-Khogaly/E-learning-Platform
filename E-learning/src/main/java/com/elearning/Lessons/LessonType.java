@@ -1,4 +1,4 @@
-package com.elearning.entities;
+package com.elearning.Lessons;
 
 public enum LessonType {
     TXT("TXT"),VIDEO("VIDEO");
