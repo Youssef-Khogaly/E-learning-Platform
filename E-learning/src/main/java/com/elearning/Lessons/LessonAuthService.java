@@ -5,31 +5,36 @@ import com.elearning.Courses.CourseAuthorization;
 import com.elearning.entities.UserEnrollment;
 import com.elearning.entities.users.User;
 import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
-class LessonAuthService {
+public class LessonAuthService {
 
     private final CourseAuthorization courseAuthorization;
     // need to check if user is instructor before checking enrollment
-    boolean canRead(Lesson lesson, UserEnrollment userEnrollment)
+    public boolean canRead(Lesson lesson, UserEnrollment userEnrollment)
     {
         if(lesson.getIsPreview())
             return true;
+        // must be enrolled
+        if(userEnrollment == null)
+            return false;
+
         if(lesson.getStatus() == LessonStatus.PUBLISHED)
         {
             return true;
         }
         else if( lesson.getStatus() == LessonStatus.UNPUBLISHED)
         {
-            return userEnrollment.getEnrollDate().isBefore(lesson.getLast_unpublished_timeStamp());
+            if(lesson.getGetLastUnpublishedAt() == null)
+                throw new NullPointerException("lesson unpublished, while unpublished date is null"); // safety, should never happen
+            return userEnrollment.getEnrollDate().isBefore(lesson.getGetLastUnpublishedAt());
         }
         return false;
     }
 
-    boolean canWrite(User user , Course course , Lesson lesson)
+    public boolean canWrite(User user , Course course , Lesson lesson)
     {
         return courseAuthorization.canWrite(user,course);
     }

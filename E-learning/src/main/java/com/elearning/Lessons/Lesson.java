@@ -1,7 +1,6 @@
 package com.elearning.Lessons;
 
 import com.elearning.entities.Section;
-import com.elearning.entities.video.Video;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -26,8 +25,8 @@ public class Lesson {
     private String title;
 
     private LessonStatus status;
-    private Instant last_published_timeStamp;
-    private Instant last_unpublished_timeStamp;
+    private Instant getLastPublishedAt;
+    private Instant getLastUnpublishedAt;
 
     private Boolean isPreview;
 
