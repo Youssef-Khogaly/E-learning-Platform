@@ -26,7 +26,6 @@ public class CourseStateTransitionService {
         if(course.getState() == CourseState.DRAFT || course.getState() == CourseState.UNPUBLISHED)
         {
             course.setState(CourseState.PUBLISHED);
-            course.setUnPublishedAt(null);
             course.setPublishedAt(Instant.now());
         }else
         {
@@ -54,7 +53,6 @@ public class CourseStateTransitionService {
         else{
             course.setState(CourseState.UNPUBLISHED);
             course.setUnPublishedAt(Instant.now());
-            course.setPublishedAt(null);
         }
 
         return course;

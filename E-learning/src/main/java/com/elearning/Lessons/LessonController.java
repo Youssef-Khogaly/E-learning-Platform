@@ -2,6 +2,7 @@ package com.elearning.Lessons;
 
 import com.elearning.Lessons.Dto.LessonDto;
 import com.elearning.Lessons.Requests.LessonPostRequest;
+import com.elearning.Lessons.Requests.LessonPutRequest;
 import com.elearning.Lessons.mappers.LessonOwnerDtoMapper;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -43,21 +44,28 @@ public class LessonController {
     @PutMapping("/{courseId}/sections/{sectionId}/lessons/{lessonId}")
     public ResponseEntity<LessonDto>updateLesson(@PathVariable @NotNull @Positive Long courseId ,@PathVariable @NotNull @Positive Long sectionId ,
                                             @PathVariable @NotNull @Positive Integer lessonId ,
-                                            @RequestBody @Valid LessonPostRequest request ){
+                                            @RequestBody @Valid LessonPutRequest request ){
 
-        var lesson = lessonService.update(courseId,sectionId,lessonId,request.title(),request.index(),request.isPreview(),request.type());
+        var lesson = lessonService.update(courseId,sectionId,lessonId,request.title(),request.index(),request.isPreview());
+        return ResponseEntity.ok(lessonOwnerDtoMapper.from(lesson,true));
+    }
+
+    @PutMapping("/{courseId}/sections/{sectionId}/lessons/{lessonId}/publish")
+    public ResponseEntity<LessonDto>publishLesson(@PathVariable @NotNull @Positive Long courseId ,@PathVariable @NotNull @Positive Long sectionId ,
+                                                 @PathVariable @NotNull @Positive Integer lessonId){
+        var lesson = lessonService.publish(courseId,sectionId,lessonId);
+        return ResponseEntity.ok(lessonOwnerDtoMapper.from(lesson,true));
+    }
+    @PutMapping("/{courseId}/sections/{sectionId}/lessons/{lessonId}/unpublish")
+    public ResponseEntity<LessonDto>unpublishLesson(@PathVariable @NotNull @Positive Long courseId ,@PathVariable @NotNull @Positive Long sectionId ,
+                                                 @PathVariable @NotNull @Positive Integer lessonId){
+        var lesson = lessonService.unpublish(courseId,sectionId,lessonId);
         return ResponseEntity.ok(lessonOwnerDtoMapper.from(lesson,true));
     }
     @DeleteMapping("/{courseId}/sections/{sectionId}/lessons/{lessonId}")
     public ResponseEntity<Void>deleteLesson(@PathVariable @NotNull @Positive Long courseId , @PathVariable @NotNull @Positive Long sectionId, @PathVariable @NotNull @Positive Integer lessonId){
+
+        lessonService.delete(courseId,sectionId,lessonId);
         return ResponseEntity.ok().build();
     }
-
-
-    @GetMapping("/{courseId}/sections/{sectionId}/lessons/{lessonId}/content")
-    public ResponseEntity<Void>updateLesson(@PathVariable @NotNull @Positive Long courseId ,@PathVariable @NotNull @Positive Long sectionId ,
-                                            @PathVariable @NotNull @Positive Integer lessonId){
-        return ResponseEntity.ok().build();
-    }
-
 }

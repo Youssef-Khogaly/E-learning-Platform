@@ -25,7 +25,7 @@ public class LessonOwnerDtoMapper implements LessonMapper{
                 .index(lesson.getIndex())
                 .type(lesson.getType())
                 .title(lesson.getTitle())
-                .status(lesson.getStatus())
+                .status(lesson.getState())
                 .last_published_timeStamp(lesson.getLastPublishedAt())
                 .last_unpublished_timeStamp(lesson.getLastUnpublishedAt())
                 .isPreview(lesson.getIsPreview())

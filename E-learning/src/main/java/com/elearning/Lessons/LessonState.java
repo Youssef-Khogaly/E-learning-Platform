@@ -1,10 +1,10 @@
 package com.elearning.Lessons;
 
-public enum LessonStatus {
+public enum LessonState {
     DRAFT("DRAFT"),PUBLISHED("PUBLISHED"),UNPUBLISHED("UNPUBLISHED");
     private String str;
 
-    LessonStatus(String str) {
+    LessonState(String str) {
         this.str = str;
     }
 

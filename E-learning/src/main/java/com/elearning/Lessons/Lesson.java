@@ -24,7 +24,7 @@ public class Lesson {
     private LessonType type;
     private String title;
 
-    private LessonStatus status;
+    private LessonState state;
     private Instant lastPublishedAt;
     private Instant lastUnpublishedAt;
 
