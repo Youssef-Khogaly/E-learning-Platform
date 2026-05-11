@@ -30,4 +30,6 @@ public interface SectionJpaRepo extends JpaRepository<Section,Long> {
     Optional<Section>findByIdWithLessons(Long secitonId);
 
     boolean existsByCourse_IdAndIndex(Long courseId, Integer index);
+
+    boolean existsByIdAndCourse_Id(Long id, Long courseId);
 }

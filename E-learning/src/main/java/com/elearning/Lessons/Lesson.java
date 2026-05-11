@@ -25,8 +25,8 @@ public class Lesson {
     private String title;
 
     private LessonStatus status;
-    private Instant getLastPublishedAt;
-    private Instant getLastUnpublishedAt;
+    private Instant lastPublishedAt;
+    private Instant lastUnpublishedAt;
 
     private Boolean isPreview;
 

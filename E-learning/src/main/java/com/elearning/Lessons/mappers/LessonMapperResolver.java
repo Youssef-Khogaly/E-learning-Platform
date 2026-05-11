@@ -22,7 +22,7 @@ public class LessonMapperResolver{
     private final LessonAuthService lessonAuthService;
 
 
-    Collection<LessonDto> resolve(final User user, final Course course, final Collection<Lesson> lesson , final UserEnrollment userEnrollment)
+    public Collection<LessonDto> resolve(final User user, final Course course, final Collection<Lesson> lesson , final UserEnrollment userEnrollment)
     {
         for(LessonMapper mapper: lessonMappers)
         {

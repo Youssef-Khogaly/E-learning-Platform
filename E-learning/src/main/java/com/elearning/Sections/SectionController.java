@@ -34,7 +34,7 @@ public class SectionController {
     @PostMapping("/{courseId}/sections")
     public ResponseEntity<Void>createSection(@PathVariable @NotNull @Positive Long courseId
             , @Valid @NotNull @RequestBody SectionPostRequest request){
-        var section = sectionService.createSection(1L,courseId,request.index(),request.title());
+        var section = sectionService.createSection(courseId,request.index(),request.title());
         URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri()
                 .path("/{id}").buildAndExpand(section.getId()).toUri();
         return ResponseEntity.created(uri).build();
@@ -44,7 +44,7 @@ public class SectionController {
     public ResponseEntity<SectionDTO>updateSection(@PathVariable @NotNull @Positive Long courseId
             ,@PathVariable @NotNull @Positive Long sectionId  ,@RequestBody SectionPostRequest request){
 
-        var ret = sectionDtoMapper.from(sectionService.updateSection(1L,courseId,sectionId,request.index(),request.title()));
+        var ret = sectionDtoMapper.from(sectionService.updateSection(courseId,sectionId,request.index(),request.title()));
         return ResponseEntity.ok().body(ret);
     }
     // should make sure that the user is the course owner
@@ -52,7 +52,7 @@ public class SectionController {
     public ResponseEntity<Void>deleteSection(@PathVariable @NotNull @Positive Long courseId
             ,@PathVariable @NotNull @Positive Long sectionId){
 
-        sectionService.deleteSection(1L,courseId,sectionId);
+        sectionService.deleteSection(courseId,sectionId);
         return ResponseEntity.ok().build();
     }
 }

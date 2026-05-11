@@ -21,12 +21,13 @@ public class LessonOwnerDtoMapper implements LessonMapper{
 
         return LessonDto.builder()
                 .id(lesson.getId())
+                .sectionId(lesson.getId())
                 .index(lesson.getIndex())
                 .type(lesson.getType())
                 .title(lesson.getTitle())
                 .status(lesson.getStatus())
-                .last_published_timeStamp(lesson.getGetLastPublishedAt())
-                .last_unpublished_timeStamp(lesson.getGetLastUnpublishedAt())
+                .last_published_timeStamp(lesson.getLastPublishedAt())
+                .last_unpublished_timeStamp(lesson.getLastUnpublishedAt())
                 .isPreview(lesson.getIsPreview())
                 .accessible(isAccessible)
                 .build();

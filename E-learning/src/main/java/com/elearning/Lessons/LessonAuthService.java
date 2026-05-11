@@ -27,9 +27,9 @@ public class LessonAuthService {
         }
         else if( lesson.getStatus() == LessonStatus.UNPUBLISHED)
         {
-            if(lesson.getGetLastUnpublishedAt() == null)
+            if(lesson.getLastUnpublishedAt() == null)
                 throw new NullPointerException("lesson unpublished, while unpublished date is null"); // safety, should never happen
-            return userEnrollment.getEnrollDate().isBefore(lesson.getGetLastUnpublishedAt());
+            return userEnrollment.getEnrollDate().isBefore(lesson.getLastUnpublishedAt());
         }
         return false;
     }
