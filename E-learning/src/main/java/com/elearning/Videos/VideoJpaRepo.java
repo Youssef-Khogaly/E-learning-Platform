@@ -6,6 +6,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.Optional;
+
 public interface VideoJpaRepo extends JpaRepository<Video,String> {
 
     @Query("select l.isPreview from Video v right join Lesson l on l.video.id is not null  and v.id = l.video.id")
@@ -22,5 +24,6 @@ public interface VideoJpaRepo extends JpaRepository<Video,String> {
         """)
     boolean canUserWatch(String vidId , Long usrId);
 
+    Optional<Video> findByIdAndVideoOwner_Id(String id, Long videoOwnerId);
     Page<Video> findAllByVideoOwner_Id(Long videoOwnerId , Pageable pageable);
 }

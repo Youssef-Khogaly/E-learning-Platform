@@ -27,7 +27,7 @@ public class LessonMapperResolver{
         for(LessonMapper mapper: lessonMappers)
         {
             if(mapper.supported(user,course))
-                return mapper.from(lesson,l -> lessonAuthService.canRead(l,userEnrollment));
+                return mapper.from(lesson,l -> lessonAuthService.canRead(user,course,l,userEnrollment));
         }
 
         throw new RuntimeException("can not map to lesson dto , unexpected exception");

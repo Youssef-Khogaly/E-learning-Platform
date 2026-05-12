@@ -1,6 +1,7 @@
 package com.elearning.entities.video;
 
 import com.elearning.Lessons.Lesson;
+import com.elearning.Videos.Dto.VideoAssets;
 import com.elearning.entities.users.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.hypersistence.utils.hibernate.type.json.JsonType;
@@ -33,10 +34,6 @@ public class Video {
     @Transient
     @JsonIgnore
     private VideoAssets assetsDto;
-
-    @JsonIgnore
-    @OneToOne(mappedBy = "video")
-    private Lesson lesson;
     @Embedded
     private VideoStatus videoStatus;
     @Column(updatable = false)
@@ -103,14 +100,6 @@ public class Video {
 
     public void setAssetsDto(VideoAssets assetsDto) {
         this.assetsDto = assetsDto;
-    }
-
-    public Lesson getLesson() {
-        return lesson;
-    }
-
-    public void setLesson(Lesson lesson) {
-        this.lesson = lesson;
     }
 
     public VideoStatus getVideoStatus() {

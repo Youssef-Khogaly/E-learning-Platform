@@ -12,6 +12,7 @@ import com.elearning.Sections.SectionService;
 import com.elearning.UserEnroll.UserEnrollmentService;
 import com.elearning.entities.UserEnrollment;
 import com.elearning.entities.users.User;
+import com.elearning.entities.users.UserRoles;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,25 +31,28 @@ public class LessonService {
     private final CourseAuthorization courseAuthorization;
     private final LessonStateTransitionService lessonStateTransitionService;
 
+
+
+    @Transactional(readOnly = true)
     public Collection<LessonDto> findAllForUser(Long courseId , Long sectionId)
     {
         Long userId = 1L; // get current user id from security context, null in case of  anonymous user
         UserEnrollment enroll = null;
         Course course = null;
-        User usr = null;
-        if(userId != null) // authenticated user
-            enroll = userEnrollmentService.findByUserAndCourse(userId,courseId).orElse(null);
+        User usr = new User();
+        usr.setId(1L);
+        usr.setRole(UserRoles.Student);
 
+        course = courseService.findById(courseId);
+
+        // should not see anything about this course
+        if(!courseAuthorization.canRead(usr,course))
+            throw new UnAuthorizedException("Not Authorized");
+
+
+        enroll = userEnrollmentService.findByUserAndCourse(userId,courseId).orElse(null);
         var lessons = lessonJpaRepo.findAllByCourseAndSection(courseId,sectionId);
-        // to avoid fetching course twice, since it is already fetched inside enroll entity
-        if(enroll == null)
-        {
-            course = courseService.findById(courseId);
-        }
-        else {
-            usr = enroll.getUser();
-            course = enroll.getCourse();
-        }
+
         return lessonMapperResolver.resolve(usr,course,lessons,enroll);
     }
 
@@ -77,7 +81,7 @@ public class LessonService {
     }
 
     @Transactional
-    public Lesson update(long courseId, long sectionId,int lessonId,String title,int index,boolean isPreview)
+    public Lesson update(long courseId, long sectionId,long lessonId,String title,int index,boolean isPreview)
     {
         var lesson = getLessonOrThrow(courseId,sectionId,lessonId);
         canWriteOrThrow(lesson);
@@ -88,7 +92,7 @@ public class LessonService {
     }
 
     @Transactional
-    public void delete(long courseId, long sectionId,int lessonId)
+    public void delete(long courseId, long sectionId,long lessonId)
     {
         var lesson = getLessonOrThrow(courseId,sectionId,lessonId);
         canWriteOrThrow(lesson);
@@ -100,14 +104,14 @@ public class LessonService {
         throw new BadRequestException("Only draft lessons can be deleted");
     }
     @Transactional
-    public Lesson publish(long courseId,long sectionId,int lessonId)
+    public Lesson publish(long courseId,long sectionId,long lessonId)
     {
         var lesson = getLessonOrThrow(courseId,sectionId,lessonId);
         canWriteOrThrow(lesson);
         return lessonStateTransitionService.publishLesson(lesson);
     }
     @Transactional
-    public Lesson unpublish(long courseId,long sectionId,int lessonId)
+    public Lesson unpublish(long courseId,long sectionId,long lessonId)
     {
         var lesson = getLessonOrThrow(courseId,sectionId,lessonId);
         canWriteOrThrow(lesson);
@@ -115,7 +119,7 @@ public class LessonService {
         return lessonStateTransitionService.unPublishLesson(lesson);
     }
 
-    private Lesson getLessonOrThrow(long courseId,long sectionId,int lessonId)
+    public Lesson getLessonOrThrow(long courseId,long sectionId,long lessonId)
     {
         return lessonJpaRepo.findByWithSectionAndCourse(courseId,sectionId,lessonId).orElseThrow(() ->  new NotFoundException("lesson with id:" + lessonId +" is not found"));
     }

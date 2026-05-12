@@ -1,8 +1,7 @@
-package com.elearning.entities.video;
+package com.elearning.Videos.Dto;
 
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.net.URI;

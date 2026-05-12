@@ -7,7 +7,7 @@ import com.elearning.VideoExternalService.Exceptions.ApiVideoRateLimiterExceptio
 import com.elearning.entities.video.Mappers.VideoMapper;
 import com.elearning.entities.video.Mappers.VideoStatusMapper;
 import com.elearning.entities.video.Video;
-import com.elearning.entities.video.VideoAssets;
+import com.elearning.Videos.Dto.VideoAssets;
 import com.elearning.entities.video.VideoStatus;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

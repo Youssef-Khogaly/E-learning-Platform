@@ -4,7 +4,7 @@ package com.elearning.VideoExternalService;
 import com.elearning.VideoExternalService.Dtos.UpdateVideoExternalDto;
 import com.elearning.VideoExternalService.Dtos.UploadTokenDto;
 import com.elearning.entities.video.Video;
-import com.elearning.entities.video.VideoAssets;
+import com.elearning.Videos.Dto.VideoAssets;
 import com.elearning.entities.video.VideoStatus;
 
 import java.time.Duration;

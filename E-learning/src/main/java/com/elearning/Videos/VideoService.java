@@ -8,13 +8,14 @@ import com.elearning.VideoExternalService.Dtos.UploadTokenDto;
 import com.elearning.VideoExternalService.Exceptions.ApiVideoNotFoundException;
 import com.elearning.Videos.Requests.VideoUpdatePayload;
 import com.elearning.entities.video.Video;
-import com.elearning.entities.video.VideoAssets;
+import com.elearning.Videos.Dto.VideoAssets;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
+import java.util.Optional;
 
 
 @Service
@@ -30,6 +31,10 @@ public class VideoService {
         return apiVideoService.generateUploadToken(ttl);
     }
 
+    public Optional<Video> findByIdAndOwnerId(long ownerId, String videoId)
+    {
+        return videoJpaRepo.findByIdAndVideoOwner_Id(videoId,ownerId);
+    }
     public Video findById(String videoId){
         return videoJpaRepo.findById(videoId).orElseThrow(() ->new NotFoundException("Video id does not exists , Id:" + videoId));
     }
@@ -52,12 +57,14 @@ public class VideoService {
     public boolean isOwner(Long usrId , String vidId){
         return videoJpaRepo.isOwner(usrId,vidId);
     }
-    VideoAssets getVideoAssets(String videoId){
+    public VideoAssets getVideoAssets(String videoId){
         if(!videoJpaRepo.existsById(videoId))
-            throw new NotFoundException("Invalid vidoe id , id:" + videoId);
+            throw new NotFoundException("Invalid video id , id:" + videoId);
         return apiVideoService.getVideoAssets(videoId);
     }
-
+    public VideoAssets getVideoAssets(Video video){
+        return apiVideoService.getVideoAssets(video.getId());
+    }
     @Transactional
     public void delete(final String videoId){
         if(!isExists(videoId))

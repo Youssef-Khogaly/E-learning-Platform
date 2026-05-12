@@ -33,7 +33,7 @@ public class LessonController {
     }
     @PostMapping("/{courseId}/sections/{sectionId}/lessons")
     public ResponseEntity<Void>createLesson(@PathVariable @NotNull @Positive Long courseId ,
-                                            @PathVariable @NotNull @Positive Integer sectionId ,
+                                            @PathVariable @NotNull @Positive Long sectionId ,
                                             @RequestBody @Valid LessonPostRequest request){
 
         var lesson = lessonService.create(courseId,sectionId,request.title(),request.index(),request.isPreview(),request.type());
@@ -43,7 +43,7 @@ public class LessonController {
     }
     @PutMapping("/{courseId}/sections/{sectionId}/lessons/{lessonId}")
     public ResponseEntity<LessonDto>updateLesson(@PathVariable @NotNull @Positive Long courseId ,@PathVariable @NotNull @Positive Long sectionId ,
-                                            @PathVariable @NotNull @Positive Integer lessonId ,
+                                            @PathVariable @NotNull @Positive Long lessonId ,
                                             @RequestBody @Valid LessonPutRequest request ){
 
         var lesson = lessonService.update(courseId,sectionId,lessonId,request.title(),request.index(),request.isPreview());
@@ -52,18 +52,18 @@ public class LessonController {
 
     @PutMapping("/{courseId}/sections/{sectionId}/lessons/{lessonId}/publish")
     public ResponseEntity<LessonDto>publishLesson(@PathVariable @NotNull @Positive Long courseId ,@PathVariable @NotNull @Positive Long sectionId ,
-                                                 @PathVariable @NotNull @Positive Integer lessonId){
+                                                 @PathVariable @NotNull @Positive Long lessonId){
         var lesson = lessonService.publish(courseId,sectionId,lessonId);
         return ResponseEntity.ok(lessonOwnerDtoMapper.from(lesson,true));
     }
     @PutMapping("/{courseId}/sections/{sectionId}/lessons/{lessonId}/unpublish")
     public ResponseEntity<LessonDto>unpublishLesson(@PathVariable @NotNull @Positive Long courseId ,@PathVariable @NotNull @Positive Long sectionId ,
-                                                 @PathVariable @NotNull @Positive Integer lessonId){
+                                                 @PathVariable @NotNull @Positive Long lessonId){
         var lesson = lessonService.unpublish(courseId,sectionId,lessonId);
         return ResponseEntity.ok(lessonOwnerDtoMapper.from(lesson,true));
     }
     @DeleteMapping("/{courseId}/sections/{sectionId}/lessons/{lessonId}")
-    public ResponseEntity<Void>deleteLesson(@PathVariable @NotNull @Positive Long courseId , @PathVariable @NotNull @Positive Long sectionId, @PathVariable @NotNull @Positive Integer lessonId){
+    public ResponseEntity<Void>deleteLesson(@PathVariable @NotNull @Positive Long courseId , @PathVariable @NotNull @Positive Long sectionId, @PathVariable @NotNull @Positive Long lessonId){
 
         lessonService.delete(courseId,sectionId,lessonId);
         return ResponseEntity.ok().build();

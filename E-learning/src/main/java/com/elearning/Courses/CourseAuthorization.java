@@ -18,7 +18,7 @@ public class CourseAuthorization {
         Objects.requireNonNull(usr);
         Objects.requireNonNull(course);
         // owner always has access
-        if(course.getInstructor().equals(usr))
+        if(course.getInstructor().getId().equals(usr.getId()))
             return true;
         // draft is private
         if(course.getState() == CourseState.DRAFT)
@@ -35,6 +35,7 @@ public class CourseAuthorization {
     public boolean canWrite(final User usr , final Course course){
         Objects.requireNonNull(usr);
         Objects.requireNonNull(course);
-        return course.getInstructor().equals(usr);
+        return course.getInstructor().getId().equals(usr.getId());
+
     }
 }

@@ -1,6 +1,6 @@
 package com.elearning.entities.video.Mappers;
 
-import com.elearning.entities.video.VideoAssets;
+import com.elearning.Videos.Dto.VideoAssets;
 import org.springframework.stereotype.Component;
 
 @Component

@@ -14,12 +14,13 @@ import java.util.Objects;
 public class LessonContent {
 
     @Id
-    private Integer id;
+    private Long id;
     @MapsId
     @OneToOne(optional = false)
     @JoinColumn(name = "id",nullable = false)
     private Lesson lesson;
     private String text;
+    private int duration;
     @OneToOne(optional = true)
     @JoinColumn(name = "videoId",nullable = true)
     private Video video;
