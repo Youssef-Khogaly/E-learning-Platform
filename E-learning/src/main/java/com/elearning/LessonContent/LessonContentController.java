@@ -1,5 +1,6 @@
 package com.elearning.LessonContent;
 
+import com.elearning.Exceptions.BadRequestException;
 import com.elearning.LessonContent.Requests.PutContentReq;
 import com.elearning.LessonContent.dto.LessonContentDto;
 import com.elearning.LessonContent.dto.TxtContentDto;
@@ -64,7 +65,19 @@ public class LessonContentController {
                                           @Valid PutContentReq req
                                           )
     {
+        if(req.type() == LessonType.TXT)
+        {
+            lessonContentService.updateTxtContent(courseId,sectionId,lessonId,req.content());
+        }
+        else if( req.type() == LessonType.VIDEO)
+        {
+            lessonContentService.updateVideoContent(courseId,sectionId,lessonId,req.content());
+        }
+        else {
+            throw new BadRequestException("Unsupported lesson type");
+        }
 
+        return ResponseEntity.ok().build();
     }
 
 }
