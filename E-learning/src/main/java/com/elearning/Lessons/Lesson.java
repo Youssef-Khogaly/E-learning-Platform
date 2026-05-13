@@ -15,7 +15,7 @@ import java.util.Objects;
 public class Lesson {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
     private Integer index;
     @JoinColumn(name = "sectionId",nullable = false)
     @ManyToOne(optional = false)

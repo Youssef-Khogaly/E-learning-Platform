@@ -6,10 +6,13 @@ import com.elearning.Courses.CourseService;
 import com.elearning.Exceptions.BadRequestException;
 import com.elearning.Exceptions.NotFoundException;
 import com.elearning.Exceptions.UnAuthorizedException;
+import com.elearning.LessonContent.LessonContentRepo;
+import com.elearning.LessonContent.LessonContentService;
 import com.elearning.Lessons.Dto.LessonDto;
 import com.elearning.Lessons.mappers.LessonMapperResolver;
 import com.elearning.Sections.SectionService;
 import com.elearning.UserEnroll.UserEnrollmentService;
+import com.elearning.entities.LessonContent;
 import com.elearning.entities.UserEnrollment;
 import com.elearning.entities.users.User;
 import com.elearning.entities.users.UserRoles;
@@ -30,7 +33,7 @@ public class LessonService {
     private final SectionService sectionService;
     private final CourseAuthorization courseAuthorization;
     private final LessonStateTransitionService lessonStateTransitionService;
-
+    private final LessonContentRepo lessonContentRepo;
 
 
     @Transactional(readOnly = true)
@@ -57,6 +60,7 @@ public class LessonService {
     }
 
 
+    @Transactional
     public Lesson create(long courseId, long sectionId,String title,int index,boolean isPreview,LessonType type)
     {
         var section = sectionService.findById(sectionId);
@@ -75,7 +79,13 @@ public class LessonService {
            lesson.setTitle(title);
            lesson.setState(LessonState.DRAFT);
            lesson.setType(type);
-           return lessonJpaRepo.save(lesson);
+           var ret = lessonJpaRepo.save(lesson);
+           var content = new LessonContent();
+           content.setId(ret.getId());
+           content.setLesson(ret);
+           lessonContentRepo.save(content);
+
+           return ret;
         }
         throw new UnAuthorizedException("Not authorized");
     }

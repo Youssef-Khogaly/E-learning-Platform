@@ -51,7 +51,6 @@ public class LessonContentService {
         }
         return lessonContentRepo.findById(lessonId).orElseThrow(() -> new NotFoundException("Lesson not found") );
     }
-
     @Transactional
     public void updateVideoContent(final long courseId,final long sectionId,final long lessonId,final String videoId)
     {
