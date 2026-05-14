@@ -13,10 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import video.api.client.ApiVideoClient;
 import video.api.client.api.ApiException;
-import video.api.client.api.models.Metadata;
-import video.api.client.api.models.TokenCreationPayload;
-import video.api.client.api.models.VideoThumbnailPickPayload;
-import video.api.client.api.models.VideoUpdatePayload;
+import video.api.client.api.models.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -185,6 +182,18 @@ public class ApiVideoImpl implements ApiVideoService , ApiVideoUtils {
         try{
             video.api.client.api.models.VideoStatus apiStat = client.videos().getStatus(videoId);
             return videoStatusMapper.from(apiStat);
+        } catch (ApiException e) {
+            throw exceptionTranslator.translate(e);
+        }
+    }
+
+    @Override
+    public Webhook getWebHook(String webHookId){
+        if(webHookId == null || webHookId.isBlank())
+            throw new IllegalArgumentException("null or blank webhook id");
+
+        try{
+            return client.webhooks().get(webHookId);
         } catch (ApiException e) {
             throw exceptionTranslator.translate(e);
         }

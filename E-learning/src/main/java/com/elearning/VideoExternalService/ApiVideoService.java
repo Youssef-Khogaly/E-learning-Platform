@@ -6,6 +6,7 @@ import com.elearning.VideoExternalService.Dtos.UploadTokenDto;
 import com.elearning.entities.video.Video;
 import com.elearning.Videos.Dto.VideoAssets;
 import com.elearning.entities.video.VideoStatus;
+import video.api.client.api.models.Webhook;
 
 import java.time.Duration;
 
@@ -29,5 +30,7 @@ public interface ApiVideoService {
     void setThumbnail(String videoId , String timeCode);
     VideoStatus getVideoStatus(String videoId);
 
+
+    Webhook getWebHook(String webHookId);
 
 }
