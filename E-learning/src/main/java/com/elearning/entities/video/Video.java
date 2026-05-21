@@ -8,6 +8,7 @@ import io.hypersistence.utils.hibernate.type.json.JsonType;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.Type;
+import org.springframework.data.domain.Persistable;
 
 import java.time.Instant;
 import java.util.HashMap;
@@ -19,7 +20,7 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "video")
-public class Video {
+public class Video implements Persistable<String> {
     @Id
     private String id;
     private String title;
@@ -46,9 +47,24 @@ public class Video {
         return metaData.remove(key);
     }
 
+    @Transient
+    private boolean isNew = true;
+    @Override
+    public boolean isNew() {
+        return isNew;
+    }
+
+    @PostLoad
+    @PostPersist
+    public void markOld(){
+        isNew = false;
+    }
+
     public String getId() {
         return id;
     }
+
+
 
     public void setId(String id) {
         this.id = id;

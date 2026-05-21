@@ -78,25 +78,11 @@ public class ApiVideoImpl implements ApiVideoService , ApiVideoUtils {
     }
 
     @Override
-    public Video updateVideo(String videoId, UpdateVideoExternalDto updateDto) {
+    public Video updateVideo(String videoId, VideoUpdatePayload updatePayload) {
         Objects.requireNonNull(videoId);
-        Objects.requireNonNull(updateDto);
+        Objects.requireNonNull(updatePayload);
         if(videoId.isBlank())
             throw new IllegalArgumentException("Blank video Id !!");
-        VideoUpdatePayload updatePayload = new VideoUpdatePayload();
-        updatePayload.setPlayerId(updateDto.getPlayerId());
-        updatePayload.setDescription(updateDto.getDesc());
-        updatePayload.setMp4Support(updateDto.getIsMp4Supported());
-        updatePayload.setPublic(updateDto.getIsPublic());
-        updatePayload.setTranscript(updateDto.getEnableTranscript());
-        if(updateDto.getMetaData() != null && !updateDto.getMetaData().isEmpty())
-        {
-            List<Metadata> metadataList = new ArrayList<>(updateDto.getMetaData().size());
-            for(Map.Entry<String,String> entry : updateDto.getMetaData().entrySet()){
-                metadataList.add(new Metadata(entry.getKey(),entry.getValue()));
-            }
-            updatePayload.setMetadata(metadataList);
-        }
         try{
             video.api.client.api.models.Video apiVideo = client.videos().update(videoId,updatePayload);
             return videoMapper.from(apiVideo);

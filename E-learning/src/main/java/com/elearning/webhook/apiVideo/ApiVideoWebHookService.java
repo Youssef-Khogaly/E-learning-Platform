@@ -1,15 +1,25 @@
 package com.elearning.webhook.apiVideo;
 
+import com.elearning.Users.UserJpaRepo;
 import com.elearning.VideoExternalService.ApiVideoService;
 import com.elearning.VideoExternalService.ApiVideoUtils;
+import com.elearning.VideoExternalService.Exceptions.ApiVideoException;
+import com.elearning.Videos.VideoService;
+import com.elearning.Videos.temporaryName.ItemporaryNameService;
+import com.elearning.entities.video.Video;
+import com.elearning.webhook.apiVideo.interfaces.IvideoEncodedWebhookHandler;
+import com.elearning.webhook.apiVideo.interfaces.IvideoWebhookValidator;
+import com.elearning.webhook.apiVideo.interfaces.VideoInitializationLock;
+import com.elearning.webhook.apiVideo.interfaces.WebhookSecretProvider;
+import com.elearning.webhook.apiVideo.models.VideoEncodedRequest;
+import com.elearning.webhook.apiVideo.models.VideoHookQualityEvent;
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.CannotAcquireLockException;
 import org.springframework.stereotype.Service;
-import video.api.client.ApiVideoClient;
-import video.api.client.api.ApiException;
+import video.api.client.api.models.VideoUpdatePayload;
 
 import javax.crypto.Mac;
-import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
@@ -19,20 +29,18 @@ import java.util.HexFormat;
 import java.util.Objects;
 
 @Service
-public class ApiVideoWebHookService implements WebhookSecretProvider,IvideoEncodedWebhookHandler,IvideoWebhookValidator {
+@Slf4j
+public class ApiVideoWebHookService implements WebhookSecretProvider, IvideoWebhookValidator {
 
     private final ApiVideoService apiVideoService;
     private byte[] secCache = null;
     private final ApiVideoUtils apiVideoUtils;
-    public ApiVideoWebHookService(ApiVideoService apiVideoService, ApiVideoUtils apiVideoUtils) {
+    public ApiVideoWebHookService(ApiVideoService apiVideoService, ApiVideoUtils apiVideoUtils, VideoService videoService , ItemporaryNameService itemporaryNameService, UserJpaRepo userJpaRepo, VideoInitializationLock videoInitializationLock) {
         this.apiVideoService = apiVideoService;
         this.apiVideoUtils = apiVideoUtils;
     }
 
-    @Override
-    public void handle(VideoEncodedRequest requestDto) {
 
-    }
 
     private byte[] hmacSha256(String data, byte[] sec)
     {

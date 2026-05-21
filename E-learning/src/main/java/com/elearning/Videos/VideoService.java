@@ -7,9 +7,12 @@ import com.elearning.VideoExternalService.ApiVideoUtils;
 import com.elearning.VideoExternalService.Dtos.UploadTokenDto;
 import com.elearning.VideoExternalService.Exceptions.ApiVideoNotFoundException;
 import com.elearning.Videos.Requests.VideoUpdatePayload;
+import com.elearning.entities.video.EnQuality;
 import com.elearning.entities.video.Video;
 import com.elearning.Videos.Dto.VideoAssets;
 import lombok.AllArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,13 +45,20 @@ public class VideoService {
         return videoJpaRepo.save(video);
     }
 
-    private boolean isExists(String vidId){
+    public boolean isExists(String vidId){
         return videoJpaRepo.existsById(vidId);
     }
-    private boolean isExists(Long usrId , String vidId){
+    public boolean isExists(Long usrId , String vidId){
         return isOwner(usrId,vidId);
     }
+    public void insertQuality(String vidId , EnQuality quality)
+    {
+        try{
+            videoJpaRepo.insertQuality(vidId,quality.getVal());
+        } catch (DuplicateKeyException ignore) {
+        }
 
+    }
     public boolean canUserWatch(Long usrId , String videoId){
         return videoJpaRepo.canUserWatch(videoId,usrId);
     }

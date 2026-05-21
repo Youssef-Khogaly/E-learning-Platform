@@ -4,6 +4,7 @@ import com.elearning.entities.video.Video;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.Optional;
@@ -26,4 +27,13 @@ public interface VideoJpaRepo extends JpaRepository<Video,String> {
 
     Optional<Video> findByIdAndVideoOwner_Id(String id, Long videoOwnerId);
     Page<Video> findAllByVideoOwner_Id(Long videoOwnerId , Pageable pageable);
+
+
+    @Modifying
+    @Query(value = """
+        insert into video_encoded_qualities(videoId,quality) values (:vidId,:quality)
+        """ , nativeQuery = true)
+    void insertQuality(String vidId , String quality);
+
+
 }

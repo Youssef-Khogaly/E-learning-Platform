@@ -1,4 +1,4 @@
-package com.elearning.webhook.apiVideo;
+package com.elearning.webhook.apiVideo.models;
 
 import com.elearning.entities.video.EnQuality;
 import lombok.Builder;

@@ -1,4 +1,4 @@
-package com.elearning.webhook.apiVideo;
+package com.elearning.webhook.apiVideo.interfaces;
 
 import jakarta.servlet.http.HttpServletRequest;
 

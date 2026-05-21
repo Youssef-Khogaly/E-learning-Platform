@@ -6,6 +6,7 @@ import com.elearning.VideoExternalService.Dtos.UploadTokenDto;
 import com.elearning.entities.video.Video;
 import com.elearning.Videos.Dto.VideoAssets;
 import com.elearning.entities.video.VideoStatus;
+import video.api.client.api.models.VideoUpdatePayload;
 import video.api.client.api.models.Webhook;
 
 import java.time.Duration;
@@ -15,7 +16,7 @@ public interface ApiVideoService {
     UploadTokenDto generateUploadToken(Duration ttl);
     void deleteVideo(String videoId);
     // return video without video status
-    Video updateVideo(String videoId , UpdateVideoExternalDto updateDto);
+    Video updateVideo(String videoId , VideoUpdatePayload updateDto);
     // return video without video status
     Video getVideo(String videoId);
 
