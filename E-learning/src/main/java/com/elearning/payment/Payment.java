@@ -10,6 +10,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.tool.schema.TargetType;
 
 import java.time.Instant;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -17,8 +18,9 @@ import java.time.Instant;
 public class Payment{
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(columnDefinition = "BINARY(16)")
+    private UUID id;
 
     @OneToOne(optional = false)
     @JoinColumn(name = "userId", nullable = false)
@@ -36,7 +38,7 @@ public class Payment{
     private Course course;
 
     private String transaction_id;
-
+    private String session_id;
     private long paidAt;
 
     @CreationTimestamp

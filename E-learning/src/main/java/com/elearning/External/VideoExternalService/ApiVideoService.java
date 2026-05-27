@@ -1,8 +1,7 @@
-package com.elearning.VideoExternalService;
+package com.elearning.External.VideoExternalService;
 
 
-import com.elearning.VideoExternalService.Dtos.UpdateVideoExternalDto;
-import com.elearning.VideoExternalService.Dtos.UploadTokenDto;
+import com.elearning.External.VideoExternalService.Dtos.UploadTokenDto;
 import com.elearning.entities.video.Video;
 import com.elearning.Videos.Dto.VideoAssets;
 import com.elearning.entities.video.VideoStatus;

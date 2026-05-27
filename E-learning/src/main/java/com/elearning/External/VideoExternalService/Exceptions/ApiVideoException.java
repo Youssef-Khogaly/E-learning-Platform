@@ -1,4 +1,4 @@
-package com.elearning.VideoExternalService.Exceptions;
+package com.elearning.External.VideoExternalService.Exceptions;
 
 public class ApiVideoException extends RuntimeException {
     public ApiVideoException(String message) {

@@ -1,4 +1,4 @@
-package com.elearning.VideoExternalService;
+package com.elearning.External.VideoExternalService;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

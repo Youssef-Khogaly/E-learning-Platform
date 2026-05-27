@@ -1,0 +1,28 @@
+package com.elearning.External.PaymentGateWayExternal.Mappers;
+
+import com.elearning.External.PaymentGateWayExternal.Model.PaymentGatewayLineItem;
+import com.stripe.param.checkout.SessionCreateParams;
+
+public class StripeMappers {
+
+
+
+    static public <T extends PaymentGatewayLineItem> SessionCreateParams.LineItem convertToLineItem(T itemModel) {
+
+        var product = SessionCreateParams.LineItem.PriceData.ProductData.builder()
+                .setName(itemModel.getItemName() + "  Qty: " + itemModel.getQuantity())
+                .setDescription(
+                        itemModel.getItemDescription()
+                );
+        long finalAmount = itemModel.getFinalAmountInCents();
+        if(itemModel.getImgesUrl() != null)
+            product = product.addAllImage(itemModel.getImgesUrl());
+        var priceData = SessionCreateParams.LineItem.PriceData.builder()
+                .setProductData(product.build())
+                .setCurrency(itemModel.getCurrency().getCurrencyCode())
+                .setUnitAmount(finalAmount)
+                .build();
+
+        return SessionCreateParams.LineItem.builder().setQuantity(1L).setPriceData(priceData).build();
+    }
+}

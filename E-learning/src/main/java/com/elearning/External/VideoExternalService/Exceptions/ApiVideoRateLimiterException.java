@@ -1,4 +1,4 @@
-package com.elearning.VideoExternalService.Exceptions;
+package com.elearning.External.VideoExternalService.Exceptions;
 
 import lombok.Getter;
 import video.api.client.api.ApiException;

@@ -1,4 +1,4 @@
-package com.elearning.VideoExternalService.Exceptions;
+package com.elearning.External.VideoExternalService.Exceptions;
 
 import org.springframework.stereotype.Component;
 import video.api.client.api.ApiException;

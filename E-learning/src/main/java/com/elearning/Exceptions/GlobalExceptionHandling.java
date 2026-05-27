@@ -1,8 +1,8 @@
 package com.elearning.Exceptions;
 
 import com.elearning.ErrorResponse;
-import com.elearning.VideoExternalService.Exceptions.ApiVideoRateLimiterException;
-import com.elearning.VideoExternalService.Exceptions.ApiVideoUnavailableException;
+import com.elearning.External.VideoExternalService.Exceptions.ApiVideoRateLimiterException;
+import com.elearning.External.VideoExternalService.Exceptions.ApiVideoUnavailableException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

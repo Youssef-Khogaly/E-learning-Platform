@@ -1,9 +1,8 @@
-package com.elearning.VideoExternalService;
+package com.elearning.External.VideoExternalService;
 
-import com.elearning.VideoExternalService.Dtos.UpdateVideoExternalDto;
-import com.elearning.VideoExternalService.Dtos.UploadTokenDto;
-import com.elearning.VideoExternalService.Exceptions.ApiVideoExceptionTranslator;
-import com.elearning.VideoExternalService.Exceptions.ApiVideoRateLimiterException;
+import com.elearning.External.VideoExternalService.Dtos.UploadTokenDto;
+import com.elearning.External.VideoExternalService.Exceptions.ApiVideoExceptionTranslator;
+import com.elearning.External.VideoExternalService.Exceptions.ApiVideoRateLimiterException;
 import com.elearning.entities.video.Mappers.VideoMapper;
 import com.elearning.entities.video.Mappers.VideoStatusMapper;
 import com.elearning.entities.video.Video;
@@ -18,9 +17,6 @@ import video.api.client.api.models.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.function.*;

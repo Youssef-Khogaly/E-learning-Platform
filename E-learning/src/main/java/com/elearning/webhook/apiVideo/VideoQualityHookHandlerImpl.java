@@ -1,9 +1,9 @@
 package com.elearning.webhook.apiVideo;
 
 import com.elearning.Users.UserJpaRepo;
-import com.elearning.VideoExternalService.ApiVideoService;
-import com.elearning.VideoExternalService.ApiVideoUtils;
-import com.elearning.VideoExternalService.Exceptions.ApiVideoException;
+import com.elearning.External.VideoExternalService.ApiVideoService;
+import com.elearning.External.VideoExternalService.ApiVideoUtils;
+import com.elearning.External.VideoExternalService.Exceptions.ApiVideoException;
 import com.elearning.Videos.VideoService;
 import com.elearning.Videos.temporaryName.ItemporaryNameService;
 import com.elearning.entities.video.Video;

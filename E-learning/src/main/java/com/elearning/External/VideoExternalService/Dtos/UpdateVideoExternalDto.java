@@ -1,4 +1,4 @@
-package com.elearning.VideoExternalService.Dtos;
+package com.elearning.External.VideoExternalService.Dtos;
 
 import lombok.Builder;
 import lombok.Getter;

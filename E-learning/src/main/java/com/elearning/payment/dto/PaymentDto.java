@@ -6,8 +6,9 @@ import com.elearning.util.Money;
 import lombok.Builder;
 
 import java.time.Instant;
+import java.util.UUID;
 
 @Builder
-public record PaymentDto(long id , long usrId, Money total , PaymentMethod method
-        , PaymentStatus status, String transaction_id , long paidAt , Instant createdAt,String courseTitle , long courseId) {
+public record PaymentDto(UUID id , long usrId, Money total , PaymentMethod method
+        , PaymentStatus status, String transaction_id , long paidAt , Instant createdAt, String courseTitle , long courseId) {
 }

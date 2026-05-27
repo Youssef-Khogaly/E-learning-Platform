@@ -1,7 +1,7 @@
 package com.elearning.Videos;
 
 
-import com.elearning.VideoExternalService.Dtos.UploadTokenDto;
+import com.elearning.External.VideoExternalService.Dtos.UploadTokenDto;
 import com.elearning.Videos.Dto.VideoDto;
 import com.elearning.Videos.Dto.VideoDtoMapper;
 import com.elearning.Videos.Requests.VideoUpdatePayload;

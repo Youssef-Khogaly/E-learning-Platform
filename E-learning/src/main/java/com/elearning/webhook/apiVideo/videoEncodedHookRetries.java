@@ -1,15 +1,12 @@
 package com.elearning.webhook.apiVideo;
 
-import com.elearning.VideoExternalService.Exceptions.ApiVideoUnavailableException;
+import com.elearning.External.VideoExternalService.Exceptions.ApiVideoUnavailableException;
 import com.elearning.webhook.apiVideo.interfaces.IvideoEncodedWebhookHandler;
 import com.elearning.webhook.apiVideo.models.VideoHookQualityEvent;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.CannotAcquireLockException;
 import org.springframework.stereotype.Service;
-
-import java.util.concurrent.TimeUnit;
 
 @Service("qualityHookHandlerWithRetries")
 @Slf4j

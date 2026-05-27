@@ -1,4 +1,4 @@
-package com.elearning.VideoExternalService;
+package com.elearning.External.VideoExternalService;
 
 import java.util.function.*;
 
