@@ -11,6 +11,7 @@ import java.util.Objects;
 @Entity
 @Getter
 @Setter
+@Table(name = "lessonsContent")
 public class LessonContent {
 
     @Id

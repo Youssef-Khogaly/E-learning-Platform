@@ -19,7 +19,7 @@ import java.util.Objects;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "video")
+@Table(name = "videos")
 public class Video implements Persistable<String> {
     @Id
     private String id;

@@ -71,7 +71,7 @@ public class PaymentService implements PaymentSessionService , PurchaseEligibili
                 itemDescription(null)
                 .currency(course.getPrice().getCurrency())
                 .quantity(1)
-                .finalAmountInCents(course.getPrice().getAmount())
+                .finalAmountInCents(course.getPrice().getPriceInCents())
                 .imgesUrl(null)
                 .build();
         Map<String,String> metaData = new HashMap<>();

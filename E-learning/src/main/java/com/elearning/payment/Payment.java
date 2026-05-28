@@ -15,6 +15,7 @@ import java.util.UUID;
 @Entity
 @Getter
 @Setter
+@Table(name = "payments")
 public class Payment{
 
     @Id

@@ -11,6 +11,7 @@ import java.time.Instant;
 @Entity
 @Getter
 @Setter
+@Table(name = "enrollments")
 public class UserEnrollment {
 
     @Id
