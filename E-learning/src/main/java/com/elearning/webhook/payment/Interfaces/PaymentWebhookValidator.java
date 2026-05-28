@@ -1,4 +1,4 @@
-package com.elearning.webhook.payment.Stripe;
+package com.elearning.webhook.payment.Interfaces;
 
 import jakarta.servlet.http.HttpServletRequest;
 

@@ -1,9 +1,7 @@
-package com.elearning.webhook.payment.Stripe;
+package com.elearning.webhook.payment.Interfaces;
 
 import com.elearning.webhook.payment.PaymentWebhookEvent;
 import jakarta.servlet.http.HttpServletRequest;
-
-import java.net.http.HttpRequest;
 
 public interface PaymentWebhookParser {
 
