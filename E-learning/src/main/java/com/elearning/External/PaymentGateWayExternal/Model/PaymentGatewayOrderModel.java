@@ -1,9 +1,6 @@
 package com.elearning.External.PaymentGateWayExternal.Model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 import java.util.Map;
@@ -14,6 +11,7 @@ import java.util.UUID;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class PaymentGatewayOrderModel {
     private Map<String,String> metaData;
     private  List<PaymentGatewayLineItem> items;

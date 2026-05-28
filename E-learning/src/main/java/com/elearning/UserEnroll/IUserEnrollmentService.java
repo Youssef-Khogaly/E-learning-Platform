@@ -4,4 +4,5 @@ public interface IUserEnrollmentService {
 
 
     boolean isEnrolled(Long userId , Long courseId );
+
 }

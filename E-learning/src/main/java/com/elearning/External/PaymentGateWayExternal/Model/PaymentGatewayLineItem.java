@@ -1,9 +1,6 @@
 package com.elearning.External.PaymentGateWayExternal.Model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Currency;
 import java.util.List;
@@ -11,6 +8,7 @@ import java.util.List;
 @AllArgsConstructor
 @Getter@Setter
 @NoArgsConstructor
+@Builder
 public class PaymentGatewayLineItem {
     private  String itemName;
     private  String itemDescription;

@@ -1,6 +1,7 @@
 package com.elearning.Courses;
 
 import com.elearning.entities.users.User;
+import com.elearning.util.Money;
 import jakarta.persistence.*;
 import lombok.Getter;
 
@@ -8,7 +9,6 @@ import java.time.Instant;
 import java.util.Objects;
 
 @Entity
-@Getter
 @Table(name = "course")
 public class Course {
     @Id
@@ -21,10 +21,42 @@ public class Course {
 
     private String title;
     private String desc;
-    private Long price;
+    private Money price;
     private CourseState state;
     private Instant publishedAt;
     private Instant unPublishedAt;
+
+    public Long getId() {
+        return id;
+    }
+
+    public User getInstructor() {
+        return instructor;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getDesc() {
+        return desc;
+    }
+
+    public Money getPrice() {
+        return new Money(this.price);
+    }
+
+    public CourseState getState() {
+        return state;
+    }
+
+    public Instant getPublishedAt() {
+        return publishedAt;
+    }
+
+    public Instant getUnPublishedAt() {
+        return unPublishedAt;
+    }
 
     public void setId(Long id) {
         this.id = id;
@@ -42,7 +74,7 @@ public class Course {
         this.desc = desc;
     }
 
-    public void setPrice(Long price) {
+    public void setPrice(Money price) {
         this.price = price;
     }
 

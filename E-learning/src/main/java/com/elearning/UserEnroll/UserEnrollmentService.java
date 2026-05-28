@@ -21,6 +21,8 @@ public class UserEnrollmentService implements IUserEnrollmentService{
     public boolean isEnrolled(Long userId, Long courseId) {
         return enrollmentJpaRepo.isEnrolled(userId,courseId);
     }
+
+
     public Optional<UserEnrollment> findByUserAndCourse(Long usrId,Long courseId)
     {
         return enrollmentJpaRepo.findByUser_IdAndCourse_Id(usrId,courseId);

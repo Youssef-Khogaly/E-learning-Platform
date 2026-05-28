@@ -2,14 +2,18 @@ package com.elearning.External.PaymentGateWayExternal.Stripe;
 
 
 
+import com.elearning.External.PaymentGateWayExternal.Exception.GateWayConnectionException;
 import com.elearning.External.PaymentGateWayExternal.Exception.GateWayException;
 import com.elearning.External.PaymentGateWayExternal.Exception.GateWayInvalidSessionDuration;
+import com.elearning.External.PaymentGateWayExternal.Exception.GateWayRateLimitException;
 import com.elearning.External.PaymentGateWayExternal.Interfaces.GeneratePaymentSession;
 import com.elearning.External.PaymentGateWayExternal.Mappers.StripeMappers;
 import com.elearning.External.PaymentGateWayExternal.Model.PaymentGatewayLineItem;
 import com.elearning.External.PaymentGateWayExternal.Model.PaymentSession;
 import com.elearning.External.PaymentGateWayExternal.Model.SessionGenerationCommand;
 import com.stripe.Stripe;
+import com.stripe.exception.ApiConnectionException;
+import com.stripe.exception.RateLimitException;
 import com.stripe.exception.StripeException;
 import com.stripe.model.checkout.Session;
 import com.stripe.param.checkout.SessionCreateParams;
@@ -54,9 +58,16 @@ public class StripeGeneratePaymentSession implements GeneratePaymentSession {
         Session session = null;
         try{
             session = Session.create(params);
-        }catch (StripeException e){
+        } catch (ApiConnectionException e) {
             log.error(this.getClass().getName()+ "msg:" +e.getMessage() + "\n" + " strip error:" + e.getStripeError());
-            throw  new GateWayException(e.getMessage());
+            throw new GateWayConnectionException(e.getMessage(),e);
+        } catch (RateLimitException e) {
+            log.error(this.getClass().getName()+ "msg:" +e.getMessage() + "\n" + " strip error:" + e.getStripeError());
+            throw new GateWayRateLimitException(e.getMessage(),e);
+        }
+        catch (StripeException e){
+            log.error(this.getClass().getName()+ "msg:" +e.getMessage() + "\n" + " strip error:" + e.getStripeError());
+            throw  new GateWayException(e.getMessage(),e);
         }
 
         return new PaymentSession(session.getId(),session.getUrl(),session.getClientReferenceId() ,command.orderModel(),Instant.ofEpochSecond(session.getExpiresAt()));

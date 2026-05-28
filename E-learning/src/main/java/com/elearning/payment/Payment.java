@@ -38,6 +38,7 @@ public class Payment{
     private Course course;
 
     private String transaction_id;
+    @Column(unique = true)
     private String session_id;
     private long paidAt;
 
