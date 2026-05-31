@@ -13,13 +13,11 @@ public class Section {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(name = "`index`")
     private Integer index;
     @JoinColumn(name = "courseId",nullable = false)
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false,fetch = FetchType.LAZY)
     private Course course;
     private String title;
-
-
-
 
 }

@@ -10,6 +10,7 @@ import com.elearning.Users.UserJpaRepo;
 import com.elearning.Videos.EnSortDir;
 import com.elearning.entities.users.User;
 import com.elearning.entities.users.UserRoles;
+import com.elearning.util.Money;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
@@ -53,7 +54,7 @@ public class CourseService {
 
         return  courseJpaRepo.findAllByInstructor_IdAndState(inst_id,state,pageable);
     }
-    public Course create(String title , String desc , Long price){
+    public Course create(String title , String desc , Money price){
         var course = new Course();
         course.setState(CourseState.DRAFT);
         var user = new User(); // fetch from security context later

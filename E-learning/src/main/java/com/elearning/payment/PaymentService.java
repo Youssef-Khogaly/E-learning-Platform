@@ -102,7 +102,7 @@ public class PaymentService implements PaymentSessionService , PurchaseEligibili
         PaymentSession session = paymentGatewayUtils.rateLimitRetry(() -> sessionGenerator.generateSessionUrl(command)) ;
 
         Payment payment = create(user,course,method,course.getPrice(),PaymentStatus.PENDING);
-        payment.setSession_id(session.getSession_id());
+        payment.setSessionId(session.getSession_id());
         paymentJpaRepo.save(payment);
 
         return PaymentSessionDto.builder()

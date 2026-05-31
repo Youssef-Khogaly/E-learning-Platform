@@ -58,9 +58,6 @@ public class VideoService {
         }
 
     }
-    public boolean canUserWatch(Long usrId , String videoId){
-        return videoJpaRepo.canUserWatch(videoId,usrId);
-    }
 
 
     public boolean isOwner(Long usrId , String vidId){

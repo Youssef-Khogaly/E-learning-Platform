@@ -14,7 +14,6 @@ public interface SectionJpaRepo extends JpaRepository<Section,Long> {
 
     List<Section> findAllByCourse_Id(Long courseId);
 
-    boolean existsByIdAndCourse_Id(Long id, Long courseId);
 
     @Query("""
         select case when count (l) = 0 then true

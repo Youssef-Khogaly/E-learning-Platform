@@ -48,7 +48,7 @@ public class VideoController {
     @GetMapping("/{vidId}/assets")
     public ResponseEntity<VideoAssets> getVideoAssets(@PathVariable @NotNull(message = "video id is null") @NotBlank(message = "blank video id")
                                                           String vidId){
-        if(!videoService.canUserWatch(1L,vidId))
+        if(!videoService.isOwner(1L,vidId))
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         return ResponseEntity.ok(videoService.getVideoAssets(vidId));
     }

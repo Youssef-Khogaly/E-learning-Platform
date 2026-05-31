@@ -7,7 +7,6 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.tool.schema.TargetType;
 
 import java.time.Instant;
 import java.util.UUID;
@@ -40,7 +39,7 @@ public class Payment{
 
     private String transaction_id;
     @Column(unique = true)
-    private String session_id;
+    private String sessionId;
     private long paidAt;
 
     @CreationTimestamp

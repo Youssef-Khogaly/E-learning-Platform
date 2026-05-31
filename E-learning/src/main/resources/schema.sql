@@ -12,7 +12,7 @@ create table users(
                       name varchar(256) not null ,
                       email varchar(256) unique not null ,
                       password varchar(512) not null ,
-                      role enum('Admin','Instructor','Student') not null default 'Student'
+                      role enum('ADMIN','Instructor','Student') not null default 'Student'
 );
 
 drop table if exists courses;
@@ -26,8 +26,8 @@ create table courses(
                         state enum('DRAFT','PUBLISHED','UNPUBLISHED') not null ,
                         publishedAt TIMESTAMP,
                         unPublishedAt TIMESTAMP,
-                        instructorId bigint not null ,
-                        constraint courseInstructor foreign key (instructorId) references users(id)
+                        instructor_id bigint not null ,
+                        constraint courseInstructor foreign key (instructor_id) references users(id)
                             on update CASCADE  on delete restrict
 );
 

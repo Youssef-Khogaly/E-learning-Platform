@@ -15,16 +15,20 @@ public class Course {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @JoinColumn(name = "instructorId")
-    @OneToOne
+    @JoinColumn(name = "instructor_id",nullable = false)
+    @OneToOne(optional = false)
     private User instructor;
 
     private String title;
+    @Column(name = "`desc`")
     private String desc;
     @Embedded
     private Money price;
+    @Enumerated(EnumType.STRING)
     private CourseState state;
+    @Column(name = "publishedAt")
     private Instant publishedAt;
+    @Column(name = "unPublishedAt")
     private Instant unPublishedAt;
 
     public Long getId() {

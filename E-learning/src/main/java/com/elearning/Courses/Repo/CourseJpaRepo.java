@@ -4,6 +4,7 @@ import com.elearning.Courses.Course;
 import com.elearning.Courses.CourseState;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -17,6 +18,10 @@ public interface CourseJpaRepo extends JpaRepository<Course,Long> {
 
     Optional<Course> findByIdAndState(Long id, CourseState status);
 
+    @EntityGraph(
+            attributePaths = {"instructor"},
+            type = EntityGraph.EntityGraphType.FETCH
+    )
     Page<Course> findAllByState(CourseState State, Pageable pageable);
     Page<Course> findAllByInstructor_IdAndState(Long id,CourseState state,Pageable pageable);
 

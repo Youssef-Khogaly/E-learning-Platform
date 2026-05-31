@@ -1,6 +1,7 @@
 package com.elearning.Courses;
 
 import com.elearning.Courses.Repo.CourseJpaRepo;
+import com.elearning.Exceptions.NotFoundException;
 import com.elearning.Exceptions.UnAllowedStateTransitionException;
 import com.elearning.UserEnroll.IUserEnrollmentService;
 import lombok.AllArgsConstructor;
@@ -14,14 +15,17 @@ import java.time.Instant;
 public class CourseStateTransitionService {
 
     private final CourseJpaRepo courseJpaRepo;
-    private final CourseService courseService;
-    private final IUserEnrollmentService userEnrollmentService;
+
+    private Course findById(Long id){
+        return courseJpaRepo.findById(id).orElseThrow(() -> new NotFoundException("Course with id:" + id + " does not exist" ));
+    }
     @Transactional
     public Course publishCourse(Long courseId){
 
-        var course = courseService.findById(courseId);
+        var course = findById(courseId);
         return publishCourse(course);
     }
+
     public Course publishCourse(Course course){
         if(course.getState() == CourseState.DRAFT || course.getState() == CourseState.UNPUBLISHED)
         {
@@ -36,7 +40,7 @@ public class CourseStateTransitionService {
     }
     @Transactional
     public Course unPublishCourse(Long courseId){
-        var course = courseService.findById(courseId);
+        var course = findById(courseId);
 
         return unPublishCourse(course);
     }

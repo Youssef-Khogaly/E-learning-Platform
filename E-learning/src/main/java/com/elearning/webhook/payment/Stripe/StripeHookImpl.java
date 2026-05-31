@@ -82,7 +82,7 @@ public class StripeHookImpl implements PaymentWebhookParser, PaymentWebhookValid
 
     private void handlePaymentSuccess(PaymentWebhookEvent event)
     {
-        var payment = paymentJpaRepo.findBySession_id(event.getSessionId()).orElseThrow( ()-> new RuntimeException("session id does not exists , " + event.getSessionId()));
+        var payment = paymentJpaRepo.findBySessionId(event.getSessionId()).orElseThrow( ()-> new RuntimeException("session id does not exists , " + event.getSessionId()));
         // duplicate event ignore
         if(payment.getStatus() == PaymentStatus.SUCCESS)
             return;
@@ -96,7 +96,7 @@ public class StripeHookImpl implements PaymentWebhookParser, PaymentWebhookValid
 
     private void handleSessionExpire(PaymentWebhookEvent event)
     {
-        var payment = paymentJpaRepo.findBySession_id(event.getSessionId()).orElseThrow( ()-> new RuntimeException("session id does not exists , " + event.getSessionId()));
+        var payment = paymentJpaRepo.findBySessionId(event.getSessionId()).orElseThrow( ()-> new RuntimeException("session id does not exists , " + event.getSessionId()));
         // duplicate event ignore
         // expire event should overwrite pending only!!
         if(payment.getStatus() != PaymentStatus.PENDING)

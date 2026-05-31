@@ -6,9 +6,12 @@ import com.elearning.Courses.Requests.CoursePutRequest;
 import com.elearning.Users.UserJpaRepo;
 import com.elearning.Videos.EnSortDir;
 import com.elearning.entities.users.User;
+import com.elearning.util.Money;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AllArgsConstructor;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.data.domain.Page;
@@ -37,9 +40,9 @@ public class CourseController {
     @GetMapping
     public ResponseEntity<Page<CourseDTO>>getCourses(
             @RequestParam(value = "p",required = false,defaultValue = "0")
-            @Positive Integer page
+            @PositiveOrZero Integer page
             ,@RequestParam(value = "s",required = false , defaultValue = "20") @Range(min = 20,max = 50) Integer size
-            ,@RequestParam(value = "sortBy" , defaultValue =  "price") EnCourseSortBy sortBy
+            ,@RequestParam(value = "sortBy" , defaultValue =  "PRICE") EnCourseSortBy sortBy
             , @RequestParam(value = "direction" , defaultValue = "DES") EnSortDir dir
     ){
         var ret = courseService.findAll(CourseState.PUBLISHED,size,page,sortBy,dir).map(courseDtoMapper::form);
@@ -49,18 +52,18 @@ public class CourseController {
     @GetMapping("/mine")
     public ResponseEntity<Page<CourseDTO>>getCoursesForOwner(
             @RequestParam(value = "p",required = false,defaultValue = "0")
-            @Positive Integer page
+            @PositiveOrZero Integer page
             , @RequestParam(value = "s",required = false , defaultValue = "20") @Range(min = 20,max = 50) Integer size
-            ,@RequestParam(value = "s" , required = false , defaultValue = "PUBLISHED") CourseState state
+            ,@RequestParam(value = "status" , required = false , defaultValue = "PUBLISHED") CourseState state
             , @RequestParam(value = "sortBy" , defaultValue =  "price") EnCourseSortBy sortBy
             , @RequestParam(value = "direction" , defaultValue = "DES") EnSortDir dir
     ){
-        var ret = courseService.findAllForInstructorWithState(1L,state,size,page,sortBy,dir).map(courseDtoMapper::form);
+        var ret = courseService.findAllForInstructorWithState(2L,state,size,page,sortBy,dir).map(courseDtoMapper::form);
         return ResponseEntity.ok(ret);
     }
 
-    @PostMapping("/{id}")
-    public ResponseEntity<Void> createCourse(@Valid CoursePostRequest coursePostRequest, @PathVariable @NotNull @Positive Long id)
+    @PostMapping
+    public ResponseEntity<Void> createCourse(@Valid @RequestBody CoursePostRequest coursePostRequest)
     {
         var course = courseService.create(coursePostRequest.title(),coursePostRequest.desc(),coursePostRequest.price());
         URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri()
@@ -68,7 +71,7 @@ public class CourseController {
         return ResponseEntity.created(uri).build();
     }
     @PutMapping("/{id}")
-    public ResponseEntity<CourseDTO> updateCourse(@Valid CoursePutRequest coursePutRequest, @PathVariable @NotNull @Positive Long id)
+    public ResponseEntity<CourseDTO> updateCourse(@Valid @RequestBody CoursePutRequest coursePutRequest, @PathVariable @NotNull @Positive Long id)
     {
         var course = courseService.findById(id);
         course.setPrice(coursePutRequest.price());

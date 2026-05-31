@@ -15,12 +15,11 @@ public class CourseAuthorization {
     private final UserEnrollmentService userEnrollmentService;
 
     public boolean canRead(final User usr , final Course course){
-        Objects.requireNonNull(usr);
         Objects.requireNonNull(course);
         // owner always has access
-        if(course.getInstructor().getId().equals(usr.getId()))
+        if(usr != null && course.getInstructor().getId().equals(usr.getId()))
             return true;
-        // draft is private
+        // draft is private , only owner
         if(course.getState() == CourseState.DRAFT)
             return  false;
 
@@ -30,7 +29,7 @@ public class CourseAuthorization {
             return  true;
         }
         // un published. only students who enrolled can access
-        return userEnrollmentService.findByUserAndCourse(usr.getId(),course.getId()).isPresent();
+        return usr!= null && userEnrollmentService.findByUserAndCourse(usr.getId(),course.getId()).isPresent();
     }
     public boolean canWrite(final User usr , final Course course){
         Objects.requireNonNull(usr);

@@ -19,7 +19,8 @@ public interface UserEnrollmentJpaRepo extends JpaRepository<UserEnrollment,Long
     boolean hasAnyEnroll(Long courseId);
 
     @Modifying
-    @Query(value = "insert  into UserEnrollment (usrId,courseId) values (:userId,:courseId)" , nativeQuery = true)
+    @Query(value = "insert  into enrollments (usrId,courseId) values (:usrId,:courseId)" , nativeQuery = true)
     void enroll(Long usrId , Long courseId);
+
     Optional<UserEnrollment> findByUser_IdAndCourse_Id(Long userId, Long courseId);
 }
