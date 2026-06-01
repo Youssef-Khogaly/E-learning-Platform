@@ -31,6 +31,7 @@ public class Payment{
 
     @Enumerated(EnumType.STRING)
     private PaymentMethod method;
+    @Enumerated(EnumType.STRING)
     private PaymentStatus status;
 
     @OneToOne
@@ -39,8 +40,9 @@ public class Payment{
 
     private String transaction_id;
     @Column(unique = true)
+
     private String sessionId;
-    private long paidAt;
+    private Long paidAt;
 
     @CreationTimestamp
     private Instant createdAt;

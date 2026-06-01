@@ -17,8 +17,8 @@ public class LessonContent {
     @Id
     private Long id;
     @MapsId
-    @OneToOne(optional = false)
-    @JoinColumn(name = "id",nullable = false)
+    @OneToOne(optional = false,cascade = {},orphanRemoval = false)
+    @JoinColumn(name = "id",nullable = false,updatable = false,unique = true)
     private Lesson lesson;
     @Column(name = "txt",nullable = true)
     private String text;
