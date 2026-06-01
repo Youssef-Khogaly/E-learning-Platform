@@ -21,7 +21,7 @@ public class LessonOwnerDtoMapper implements LessonMapper{
 
         return LessonDto.builder()
                 .id(lesson.getId())
-                .sectionId(lesson.getId())
+                .sectionId(lesson.getSection().getId())
                 .index(lesson.getIndex())
                 .type(lesson.getType())
                 .title(lesson.getTitle())

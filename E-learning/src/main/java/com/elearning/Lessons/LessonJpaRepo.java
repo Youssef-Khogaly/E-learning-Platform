@@ -15,6 +15,6 @@ public interface LessonJpaRepo extends JpaRepository<Lesson,Long> {
 
     Optional<Lesson> findByIdAndSection_Id(Integer id, Long sectionId);
 
-    @Query("select l from Lesson l inner join Section s on l.id =: lessonId and l.section.id = s.id inner join Course c on c.id = s.id")
+    @Query("select l from Lesson l inner join Section s on l.id = :lessonId and l.section.id = :sectionId inner join Course c on c.id = :courseId")
     Optional<Lesson>findByWithSectionAndCourse(Long courseId,Long sectionId,Long lessonId);
 }

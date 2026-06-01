@@ -16,14 +16,16 @@ public class Lesson {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(name = "`index`")
     private Integer index;
-    @JoinColumn(name = "sectionId",nullable = false)
-    @ManyToOne(optional = false)
+    @JoinColumn(name = "sectionId",nullable = false )
+    @ManyToOne(optional = false,fetch = FetchType.LAZY)
     private Section section;
     @Enumerated(EnumType.STRING)
     private LessonType type;
     private String title;
 
+    @Enumerated(EnumType.STRING)
     private LessonState state;
     private Instant lastPublishedAt;
     private Instant lastUnpublishedAt;

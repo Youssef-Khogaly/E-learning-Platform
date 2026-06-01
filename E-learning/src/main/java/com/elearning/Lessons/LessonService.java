@@ -39,12 +39,12 @@ public class LessonService {
     @Transactional(readOnly = true)
     public Collection<LessonDto> findAllForUser(Long courseId , Long sectionId)
     {
-        Long userId = 1L; // get current user id from security context, null in case of  anonymous user
+        Long userId = 2L; // get current user id from security context, null in case of  anonymous user
         UserEnrollment enroll = null;
         Course course = null;
         User usr = new User();
-        usr.setId(1L);
-        usr.setRole(UserRoles.Student);
+        usr.setId(2L);
+        usr.setRole(UserRoles.Instructor);
 
         course = courseService.findById(courseId);
 
@@ -69,7 +69,7 @@ public class LessonService {
             throw new NotFoundException("section with Id:" + sectionId +" not found in course with Id:" + courseId);
         // current user
         User currUsr = new User();
-        currUsr.setId(1L);
+        currUsr.setId(2L);
 
         if(courseAuthorization.canWrite(currUsr,course)){
            var lesson = new Lesson();
@@ -81,7 +81,7 @@ public class LessonService {
            lesson.setType(type);
            var ret = lessonJpaRepo.save(lesson);
            var content = new LessonContent();
-           content.setId(ret.getId());
+           content.setDuration(0);
            content.setLesson(ret);
            lessonContentRepo.save(content);
 
@@ -136,7 +136,7 @@ public class LessonService {
     private void canWriteOrThrow(Lesson lesson){
         // current user
         User currUsr = new User();
-        currUsr.setId(1L);
+        currUsr.setId(2L);
         if(!lessonAuthService.canWrite(currUsr,lesson.getSection().getCourse(),lesson)){
             throw new UnAuthorizedException("Not Authorized");
         }

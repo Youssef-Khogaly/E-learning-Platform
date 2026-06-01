@@ -27,7 +27,7 @@ public class Video implements Persistable<String> {
     private Boolean isPublic;
     private Boolean isMp4Support;
     @ManyToOne
-    @JoinColumn(name = "userId")
+    @JoinColumn(name = "ownerId")
     private User  videoOwner;
     @Type(JsonType.class)
     @Column(columnDefinition = "json")

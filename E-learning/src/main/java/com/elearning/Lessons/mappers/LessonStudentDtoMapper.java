@@ -19,7 +19,7 @@ public class LessonStudentDtoMapper implements LessonMapper {
     public LessonDto from(Lesson lesson, boolean isAccessible)
     {
         return LessonDto.builder().id(lesson.getId())
-                .sectionId(lesson.getId())
+                .sectionId(lesson.getSection().getId())
                 .index(lesson.getIndex())
                 .type(lesson.getType())
                 .title(lesson.getTitle())

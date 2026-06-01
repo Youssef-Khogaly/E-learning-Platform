@@ -20,7 +20,9 @@ public class LessonContent {
     @OneToOne(optional = false)
     @JoinColumn(name = "id",nullable = false)
     private Lesson lesson;
+    @Column(name = "txt",nullable = true)
     private String text;
+
     private int duration;
     @OneToOne(optional = true)
     @JoinColumn(name = "videoId",nullable = true)
