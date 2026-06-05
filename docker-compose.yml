@@ -1,0 +1,47 @@
+
+services:
+
+  backend:
+      build: ./E-learning/
+      networks:
+        - e-learning-backend-net
+      expose:
+        - 8080
+      ports:
+        - target: 8080
+          host_ip: 127.0.0.1
+          published: 8080
+      env_file:
+        - required: true
+          path: ./E-learning/backend.env
+  db-sql-service:
+    image: mysql:8.4
+    expose:
+        - 3306
+    ports:
+        - host_ip: 127.0.0.1
+          published: 3306
+          target: 3306
+    networks:
+        - e-learning-backend-net
+
+    env_file:
+        - required: true
+          path: ./DB-init/db-sql.env
+    volumes:
+        - target: /var/lib/mysql
+          source: e-learning-sql
+          type: volume
+
+        - type: bind
+          source: ./db-sql/db-init
+          target: /docker-entrypoint-initdb.d
+          read_only: true
+
+networks:
+  e-learning-backend-net:
+
+volumes:
+  e-learning-sql:
+
+
