@@ -1,6 +1,9 @@
 package com.elearning.Exceptions;
 
 import com.elearning.ErrorResponse;
+import com.elearning.External.PaymentGateWayExternal.Exception.GateWayConnectionException;
+import com.elearning.External.PaymentGateWayExternal.Exception.GateWayRateLimitException;
+import com.elearning.External.PaymentGateWayExternal.Exception.GateWayUnavailableException;
 import com.elearning.External.VideoExternalService.Exceptions.ApiVideoRateLimiterException;
 import com.elearning.External.VideoExternalService.Exceptions.ApiVideoUnavailableException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -28,8 +31,8 @@ public class GlobalExceptionHandling {
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(err);
     }
-    @ExceptionHandler(ApiVideoUnavailableException.class)
-    public ResponseEntity<?> ApiVideoUnavailable(ApiVideoUnavailableException exception , HttpServletRequest req)
+    @ExceptionHandler(exception = {ApiVideoUnavailableException.class, GateWayConnectionException.class, GateWayUnavailableException.class})
+    public ResponseEntity<?> externalServiceNotAvailable(Exception exception , HttpServletRequest req)
     {
         var err  = ErrorResponse.builder().status(HttpStatus.SERVICE_UNAVAILABLE)
                 .message(Collections.singletonList(exception.getMessage()))
@@ -37,8 +40,17 @@ public class GlobalExceptionHandling {
 
         return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(err);
     }
+    @ExceptionHandler(GateWayRateLimitException.class)
+    public ResponseEntity<?> stripeRateLimit(Exception exception , HttpServletRequest req)
+    {
+        var err  = ErrorResponse.builder().status(HttpStatus.TOO_MANY_REQUESTS)
+                .message(Collections.singletonList(exception.getMessage()))
+                .path(req.getPathInfo()).timeStamp(Instant.now()).build();
+
+        return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body(err);
+    }
     @ExceptionHandler(ApiVideoRateLimiterException.class)
-    public ResponseEntity<?> ApiVideoUnavailable(ApiVideoRateLimiterException exception , HttpServletRequest req)
+    public ResponseEntity<?> ApiVideoRateLimit(ApiVideoRateLimiterException exception , HttpServletRequest req)
     {
         var err  = ErrorResponse.builder().status(HttpStatus.TOO_MANY_REQUESTS)
                 .message(Collections.singletonList(exception.getMessage()))
