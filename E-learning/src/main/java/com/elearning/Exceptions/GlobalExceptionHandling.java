@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -43,6 +44,25 @@ public class GlobalExceptionHandling {
                 .message(Collections.singletonList(exception.getMessage()))
                 .path(req.getPathInfo()).timeStamp(Instant.now()).build();
 
-        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).header("Retry-After", String.valueOf(exception.getRetryAfterInSeconds())).body(err);
+        return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).header("Retry-After", String.valueOf(exception.getRetryAfterInSeconds())).body(err);
+    }
+
+    @ExceptionHandler(exception = {UnAllowedStateTransitionException.class, BadRequestException.class, NotAllowedOperation.class , MethodArgumentNotValidException.class})
+    public ResponseEntity<?> badRequest(Exception exception , HttpServletRequest req)
+    {
+        var err  = ErrorResponse.builder().status(HttpStatus.BAD_REQUEST)
+                .message(Collections.singletonList(exception.getMessage()))
+                .path(req.getPathInfo()).timeStamp(Instant.now()).build();
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
+    }
+    @ExceptionHandler(exception = {UnAuthorizedException.class})
+    public ResponseEntity<?> unAuthorized(Exception exception , HttpServletRequest req)
+    {
+        var err  = ErrorResponse.builder().status(HttpStatus.FORBIDDEN)
+                .message(Collections.singletonList(exception.getMessage()))
+                .path(req.getPathInfo()).timeStamp(Instant.now()).build();
+
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(err);
     }
 }
