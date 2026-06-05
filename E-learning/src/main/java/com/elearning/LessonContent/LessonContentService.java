@@ -5,6 +5,7 @@ import com.elearning.Exceptions.BadRequestException;
 import com.elearning.Exceptions.NotFoundException;
 import com.elearning.Exceptions.UnAuthorizedException;
 import com.elearning.Lessons.*;
+import com.elearning.Security.services.AuthenticationService;
 import com.elearning.UserEnroll.UserEnrollmentService;
 import com.elearning.Videos.VideoService;
 import com.elearning.entities.LessonContent;
@@ -27,14 +28,6 @@ public class LessonContentService {
     private final VideoService videoService;
     private final LessonStateValidator lessonStateValidator;
     private final int READING_SPEED = 100;
-    // temp till implement authentication service
-    private User getCurrUser()
-    {
-        var user = new User();
-        user.setId(1L);
-        user.setRole(UserRoles.Student);
-        return user;
-    }
     // it fetch lesson, section, course together
     public LessonContent getContentOrThrow(long courseId,long sectionId,long lessonId)
     {
@@ -44,7 +37,8 @@ public class LessonContentService {
     public LessonContent findByIdAndCourseIdAndSectionId(long courseId,long sectionId,long lessonId)
     {
         var lesson = lessonService.getLessonOrThrow(courseId,sectionId,lessonId);
-        boolean canAccess =lessonAuthService.canRead(getCurrUser(),lesson.getSection().getCourse(),lesson,userEnrollmentService.findByUserAndCourse(getCurrUser().getId(),courseId).orElse(null));
+        var currentUser = AuthenticationService.getCurrentUser();
+        boolean canAccess = currentUser.isPresent() && lessonAuthService.canRead(lesson.getSection().getCourse(),lesson,userEnrollmentService.findByUserAndCourse(currentUser.get().getId(), courseId).orElse(null));
         if(!canAccess)
         {
             throw new UnAuthorizedException("Not Authorized");
@@ -62,9 +56,11 @@ public class LessonContentService {
         {
             throw new BadRequestException("Invalid lesson content, must be video and can not change type");
         }
-        lessonAuthService.canWriteOrThrow(getCurrUser(),course,lesson);
+        lessonAuthService.canWriteOrThrow(course,lesson);
         lessonStateValidator.canUpdateContent(lesson);
-        var newVid = videoService.findByIdAndOwnerId(getCurrUser().getId(),videoId).orElseThrow(() -> new BadRequestException("video does not exist in your videos"));
+        var currentUser = AuthenticationService.getCurrentUser(); // should never return null
+
+        var newVid = videoService.findByIdAndOwnerId(currentUser.get().getId(), videoId).orElseThrow(() -> new BadRequestException("video does not exist in your videos"));
         content.setVideo(newVid);
         content.setDuration(newVid.getVideoStatus().getTechMetaData().getDuration());
 
@@ -81,7 +77,7 @@ public class LessonContentService {
         {
             throw new BadRequestException("Invalid lesson content, must be Txt and can not change type");
         }
-        lessonAuthService.canWriteOrThrow(getCurrUser(),course,lesson);
+        lessonAuthService.canWriteOrThrow(course,lesson);
         lessonStateValidator.canUpdateContent(lesson);
         long wordsCount = Arrays.stream(txt.split("//s+")).filter(String::isBlank).count();
         int newDuration = (int)((((double)wordsCount)/READING_SPEED)*60.0);

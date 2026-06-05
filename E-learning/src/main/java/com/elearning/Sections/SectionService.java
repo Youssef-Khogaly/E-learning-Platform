@@ -9,8 +9,6 @@ import com.elearning.Exceptions.NotAllowedOperation;
 import com.elearning.Exceptions.NotFoundException;
 import com.elearning.Exceptions.UnAuthorizedException;
 import com.elearning.entities.Section;
-import com.elearning.entities.users.User;
-import com.elearning.entities.users.UserRoles;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,24 +24,15 @@ public class SectionService {
     private final CourseJpaRepo courseJpaRepo;
     private final CourseAuthorization courseAuthorization;
 
-    private void checkWriteAccess(Long courseId,Long usrId)
+    private void checkWriteAccess(Long courseId)
     {
         var course = courseService.findById(courseId);
-        User currUsr = new User();
-        currUsr.setId(usrId);
-        checkWriteAccess(currUsr,course);
+        checkWriteAccess(course);
     }
-    private User getCurrentUser()
-    {
-        var usr = new User();
-        usr.setId(2L);
-        usr.setRole(UserRoles.Student);
-        return usr;
-    }
-    private void checkWriteAccess(User currUsr, Course course)
+    private void checkWriteAccess(Course course)
     {
         // handle authorization better way later
-        if(!courseAuthorization.canWrite(currUsr,course)){
+        if(!courseAuthorization.canWrite(course)){
             throw new UnAuthorizedException("Not authorized to edit this course");
         }
     }
@@ -64,13 +53,13 @@ public class SectionService {
     public Collection<Section> getCourseSections(Long courseId)
     {
         var course = courseService.findById(courseId);
-        if(!courseAuthorization.canRead(getCurrentUser(),course))
+        if(!courseAuthorization.canRead(course))
             throw new UnAuthorizedException("Not Authorized");
         return sectionJpaRepo.findAllByCourse_Id(courseId);
     }
     public Section createSection(Long courseId,Integer index , String title){
 
-        checkWriteAccess(courseId,getCurrentUser().getId());
+        checkWriteAccess(courseId);
 
         checkSectionIndex(courseId,index);
         Section section = new Section();
@@ -91,7 +80,7 @@ public class SectionService {
         return sectionJpaRepo.existsByIdAndCourse_Id(sectionId,courseId);
     }
     public Section updateSection(Long courseId,Long sectionId,Integer index , String title){
-        checkWriteAccess(courseId,getCurrentUser().getId());
+        checkWriteAccess(courseId);
         checkSectionIndex(courseId,index);
         var section = sectionJpaRepo.findById(sectionId).orElseThrow(() -> new NotFoundException("Section with id:" + sectionId + " does not exists"));
         section.setTitle(title);
@@ -108,7 +97,7 @@ public class SectionService {
 
     @Transactional
     public void deleteSection(Long courseId , Long sectionId){
-        checkWriteAccess(courseId,getCurrentUser().getId());
+        checkWriteAccess(courseId);
         if(isSectionDeletable(sectionId))
             sectionJpaRepo.deleteById(sectionId);
         else

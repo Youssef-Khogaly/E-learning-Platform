@@ -37,7 +37,7 @@ public class CourseController {
         return ResponseEntity.ok(courseDtoMapper.form(course));
     }
     // student api
-    @GetMapping
+    @GetMapping("/")
     public ResponseEntity<Page<CourseDTO>>getCourses(
             @RequestParam(value = "p",required = false,defaultValue = "0")
             @PositiveOrZero Integer page

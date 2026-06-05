@@ -5,6 +5,7 @@ import com.elearning.Exceptions.BadRequestException;
 import com.elearning.Exceptions.NotFoundException;
 import com.elearning.Exceptions.UnAllowedStateTransitionException;
 import com.elearning.Exceptions.UnAuthorizedException;
+import com.elearning.Security.services.AuthenticationService;
 import com.elearning.UserEnroll.UserEnrollmentJpaRepo;
 import com.elearning.Users.UserJpaRepo;
 import com.elearning.Videos.EnSortDir;
@@ -34,9 +35,7 @@ public class CourseService {
     public Course findByIdForUser(Long courseId)
     {
             var course = findById(courseId);
-            var user = new User(); // fetch from security context later
-            user.setId(1L);
-            if(courseAuthorization.canRead(user,course))
+            if(courseAuthorization.canRead(course))
                 return course;
 
             throw new UnAuthorizedException("Course access is not allowed");
@@ -71,12 +70,9 @@ public class CourseService {
     @Transactional
     public Course updateState(Long courseId , CourseState newState)
     {
-        var user = new User(); // fetch from security context later
-        user.setId(1L);
-        user.setRole(UserRoles.Instructor);
         var course = findById(courseId);
 
-        if(!courseAuthorization.canWrite(user,course))
+        if(!courseAuthorization.canWrite(course))
         {
             throw new UnAuthorizedException("Access denied");
         }

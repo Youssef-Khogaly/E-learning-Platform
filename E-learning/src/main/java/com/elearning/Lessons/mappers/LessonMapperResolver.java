@@ -32,5 +32,15 @@ public class LessonMapperResolver{
 
         throw new RuntimeException("can not map to lesson dto , unexpected exception");
     }
+    public Collection<LessonDto> resolve(final Course course, final Collection<Lesson> lesson , final UserEnrollment userEnrollment)
+    {
+        for(LessonMapper mapper: lessonMappers)
+        {
+            if(mapper.supported(course))
+                return mapper.from(lesson,l -> lessonAuthService.canRead(course,l,userEnrollment));
+        }
+
+        throw new RuntimeException("can not map to lesson dto , unexpected exception");
+    }
 
 }

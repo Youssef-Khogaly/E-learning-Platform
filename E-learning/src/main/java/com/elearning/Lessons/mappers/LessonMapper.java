@@ -11,7 +11,7 @@ import java.util.function.Predicate;
 public interface LessonMapper {
 
     boolean supported(User user , Course  course);
-
+    boolean supported(Course  course);
     LessonDto from(Lesson lesson, boolean isAccessible);
 
     Collection<LessonDto> from(Collection<Lesson> lessonCollection, Predicate<Lesson> isAccessible);

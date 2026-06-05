@@ -2,6 +2,7 @@ package com.elearning.Videos;
 
 
 import com.elearning.External.VideoExternalService.Dtos.UploadTokenDto;
+import com.elearning.Security.services.AuthenticationService;
 import com.elearning.Videos.Dto.VideoDto;
 import com.elearning.Videos.Dto.VideoDtoMapper;
 import com.elearning.Videos.Requests.VideoUpdatePayload;
@@ -48,15 +49,18 @@ public class VideoController {
     @GetMapping("/{vidId}/assets")
     public ResponseEntity<VideoAssets> getVideoAssets(@PathVariable @NotNull(message = "video id is null") @NotBlank(message = "blank video id")
                                                           String vidId){
-        if(!videoService.isOwner(1L,vidId))
+        var currentUsr = AuthenticationService.getCurrentUser();
+        if(currentUsr.isEmpty() || !videoService.isOwner(currentUsr.get().getId(), vidId))
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         return ResponseEntity.ok(videoService.getVideoAssets(vidId));
     }
     @PatchMapping("/{vidId}")
     public ResponseEntity<VideoDto> updateVideo(@PathVariable @NotNull(message = "video id is null") @NotBlank(message = "blank video id")
                                                       String vidId , @RequestBody @Valid VideoUpdatePayload payload){
-        if(!videoService.isOwner(1L,vidId))
+        var currentUsr = AuthenticationService.getCurrentUser();
+        if(currentUsr.isEmpty() || !videoService.isOwner(currentUsr.get().getId(), vidId))
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+
         return ResponseEntity.ok(videoDtoMapper.from(videoService.update(vidId,payload)));
     }
     @GetMapping
@@ -66,7 +70,10 @@ public class VideoController {
             , @RequestParam(value = "sortBy" , defaultValue =  "createAt") EnVideoSortBy sortBy
                                                    , @RequestParam(value = "direction" , defaultValue = "DES") EnSortDir dir){
 
-        Page<Video> videoPage = videoService.getVideos(1L,page,size,sortBy,dir);
+        var currentUsr = AuthenticationService.getCurrentUser();
+        if(currentUsr.isEmpty())
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        Page<Video> videoPage = videoService.getVideos(currentUsr.get().getId(), page,size,sortBy,dir);
 
         Page<VideoDto> dtos = videoPage.map(videoDtoMapper::from);
         return ResponseEntity.ok(dtos);
@@ -75,7 +82,11 @@ public class VideoController {
     public ResponseEntity<Void>deleteVideo(@PathVariable @NotNull(message = "video id is null") @NotBlank(message = "blank video id")
                                                String vidId )
     {
-        videoService.delete(1L,vidId);
+        var currentUsr = AuthenticationService.getCurrentUser();
+        if(currentUsr.isEmpty())
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+
+        videoService.delete(currentUsr.get().getId(),vidId);
         return ResponseEntity.ok().build();
     }
 }

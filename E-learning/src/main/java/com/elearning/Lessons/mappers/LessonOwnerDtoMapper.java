@@ -3,6 +3,7 @@ package com.elearning.Lessons.mappers;
 import com.elearning.Courses.Course;
 import com.elearning.Lessons.Dto.LessonDto;
 import com.elearning.Lessons.Lesson;
+import com.elearning.Security.services.AuthenticationService;
 import com.elearning.entities.users.User;
 import org.springframework.stereotype.Component;
 
@@ -14,6 +15,13 @@ public class LessonOwnerDtoMapper implements LessonMapper{
     @Override
     public boolean supported(User user, Course course) {
         return  course.getInstructor().equals(user);
+    }
+
+    @Override
+    public boolean supported(Course course) {
+        var current = AuthenticationService.getCurrentUser().orElse(null);
+
+        return current != null && course.getInstructor().getId().equals(current.getId());
     }
 
     @Override

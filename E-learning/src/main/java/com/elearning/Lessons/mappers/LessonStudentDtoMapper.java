@@ -31,6 +31,12 @@ public class LessonStudentDtoMapper implements LessonMapper {
     public boolean supported(User user, Course course) {
         return user == null || user.getRole() == UserRoles.Student;
     }
+
+    @Override
+    public boolean supported(Course course) {
+        return true;
+    }
+
     @Override
     public Collection<LessonDto> from(Collection<Lesson> lessonCollection, Predicate<Lesson> isAccessible) {
         return lessonCollection.stream()

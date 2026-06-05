@@ -11,6 +11,7 @@ import com.elearning.LessonContent.LessonContentService;
 import com.elearning.Lessons.Dto.LessonDto;
 import com.elearning.Lessons.mappers.LessonMapperResolver;
 import com.elearning.Sections.SectionService;
+import com.elearning.Security.services.AuthenticationService;
 import com.elearning.UserEnroll.UserEnrollmentService;
 import com.elearning.entities.LessonContent;
 import com.elearning.entities.UserEnrollment;
@@ -39,24 +40,22 @@ public class LessonService {
     @Transactional(readOnly = true)
     public Collection<LessonDto> findAllForUser(Long courseId , Long sectionId)
     {
-        Long userId = 2L; // get current user id from security context, null in case of  anonymous user
         UserEnrollment enroll = null;
         Course course = null;
-        User usr = new User();
-        usr.setId(2L);
-        usr.setRole(UserRoles.Instructor);
 
         course = courseService.findById(courseId);
 
         // should not see anything about this course
-        if(!courseAuthorization.canRead(usr,course))
+        if(!courseAuthorization.canRead(course))
             throw new UnAuthorizedException("Not Authorized");
 
+        // should never be null
+        var currentUsr = AuthenticationService.getCurrentUser().orElse(null);
 
-        enroll = userEnrollmentService.findByUserAndCourse(userId,courseId).orElse(null);
+        enroll = userEnrollmentService.findByUserAndCourse(currentUsr.getId(), courseId).orElse(null);
         var lessons = lessonJpaRepo.findAllByCourseAndSection(courseId,sectionId);
 
-        return lessonMapperResolver.resolve(usr,course,lessons,enroll);
+        return lessonMapperResolver.resolve(course,lessons,enroll);
     }
 
 
@@ -134,10 +133,8 @@ public class LessonService {
         return lessonJpaRepo.findByWithSectionAndCourse(courseId,sectionId,lessonId).orElseThrow(() ->  new NotFoundException("lesson with id:" + lessonId +" is not found"));
     }
     private void canWriteOrThrow(Lesson lesson){
-        // current user
-        User currUsr = new User();
-        currUsr.setId(2L);
-        if(!lessonAuthService.canWrite(currUsr,lesson.getSection().getCourse(),lesson)){
+
+        if(!lessonAuthService.canWrite(lesson.getSection().getCourse(),lesson)){
             throw new UnAuthorizedException("Not Authorized");
         }
     }
