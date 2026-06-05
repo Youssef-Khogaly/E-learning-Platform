@@ -21,7 +21,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
 import java.util.Currency;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -39,13 +41,12 @@ public class StripeHookImpl implements PaymentWebhookParser, PaymentWebhookValid
 
     private PaymentWebhookEvent toPaymentSucceedEvent(Event event){
         Session session = (Session) event.getDataObjectDeserializer().getObject().orElseThrow(() -> new RuntimeException("error parsing payment intent object , event Id:" + event.getId()));
-        PaymentIntent intent = session.getPaymentIntentObject();
-        Money amount = new Money(session.getAmountTotal(), Currency.getInstance(session.getCurrency()));
+        Money amount = new Money(session.getAmountTotal(), Currency.getInstance(session.getCurrency().toUpperCase(Locale.ROOT)));
         return PaymentWebhookEvent.builder()
                 .id(event.getId())
                 .provider(PaymentProvider.STRIPE)
                 .event(PaymentEvents.SUCCESS)
-                .transactionId(intent.getLatestCharge())
+                .transactionId(session.getPaymentIntent())
                 .sessionId(session.getId())
                 .totalAmount(amount)
                 .provider_created(event.getCreated())
@@ -91,7 +92,7 @@ public class StripeHookImpl implements PaymentWebhookParser, PaymentWebhookValid
         payment.setStatus(PaymentStatus.SUCCESS);
         payment.setPaidAt(event.getProvider_created());
         payment.setTransaction_id(event.getTransactionId());
-        userEnrollmentJpaRepo.enroll(payment.getUser().getId(),payment.getCourse().getId());
+        userEnrollmentJpaRepo.enroll(payment.getUser().getId(),payment.getCourse().getId(), Instant.now());
     }
 
     private void handleSessionExpire(PaymentWebhookEvent event)

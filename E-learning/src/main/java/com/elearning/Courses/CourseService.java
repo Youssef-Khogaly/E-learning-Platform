@@ -29,6 +29,9 @@ public class CourseService {
     public Course findById(Long id){
         return courseJpaRepo.findById(id).orElseThrow(() -> new NotFoundException("Course with id:" + id + " does not exist" ));
     }
+    public Course findByIdOnly(Long id){
+        return courseJpaRepo.findByIdOnly(id).orElseThrow(() -> new NotFoundException("Course with id:" + id + " does not exist" ));
+    }
     public Course findById(Long id , CourseState state){
         return courseJpaRepo.findByIdAndState(id,state).orElseThrow(() -> new NotFoundException("Course with id:" + id + " does not exist" ));
     }
@@ -56,12 +59,10 @@ public class CourseService {
     public Course create(String title , String desc , Money price){
         var course = new Course();
         course.setState(CourseState.DRAFT);
-        var user = new User(); // fetch from security context later
-        user.setId(1L);
-        user.setRole(UserRoles.Instructor);
-        if(user.getRole() == UserRoles.Student)
+        var usr = AuthenticationService.getCurrentUser();
+        if(usr.isEmpty() || usr.get().getRole() == UserRoles.Student)
             throw new UnAuthorizedException("Students are not allowed to create courses");
-        course.setInstructor(user);
+        course.setInstructor(userJpaRepo.getReferenceById(usr.get().getId()));
         course.setTitle(title);
         course.setDesc(desc);
         course.setPrice(price);

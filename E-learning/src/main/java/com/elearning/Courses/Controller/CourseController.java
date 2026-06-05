@@ -67,7 +67,7 @@ public class CourseController {
     {
         var course = courseService.create(coursePostRequest.title(),coursePostRequest.desc(),coursePostRequest.price());
         URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri()
-                .path("/{id}").buildAndExpand(course.getId()).toUri();
+                .path("/"+course.getId()).buildAndExpand(course.getId()).toUri();
         return ResponseEntity.created(uri).build();
     }
     @PutMapping("/{id}")

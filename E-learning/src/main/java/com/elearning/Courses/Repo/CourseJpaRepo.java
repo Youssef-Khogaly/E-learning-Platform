@@ -16,6 +16,12 @@ public interface CourseJpaRepo extends JpaRepository<Course,Long> {
     @Query("select exists (select 1 from Course  c where  c.id = :courseId and c.instructor.id = :instructorId)")
     boolean isInstructor(Long instructorId , Long courseId);
 
+    @EntityGraph(
+            attributePaths = {},
+            type = EntityGraph.EntityGraphType.FETCH
+    )
+    @Query("select c from Course c where c.id = :id")
+    Optional<Course> findByIdOnly(Long id);
     Optional<Course> findByIdAndState(Long id, CourseState status);
 
     @EntityGraph(

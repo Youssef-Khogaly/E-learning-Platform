@@ -11,6 +11,7 @@ import com.elearning.entities.video.EnQuality;
 import com.elearning.entities.video.Video;
 import com.elearning.Videos.Dto.VideoAssets;
 import lombok.AllArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
@@ -53,8 +54,8 @@ public class VideoService {
     public void insertQuality(String vidId , EnQuality quality)
     {
         try{
-            videoJpaRepo.insertQuality(vidId,quality.getVal());
-        } catch (DuplicateKeyException ignore) {
+            videoJpaRepo.insertQuality(vidId,"_"+quality.getVal());
+        } catch (DataIntegrityViolationException ignore) {
         }
 
     }

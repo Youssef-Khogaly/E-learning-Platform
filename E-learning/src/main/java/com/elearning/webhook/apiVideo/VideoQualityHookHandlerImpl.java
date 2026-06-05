@@ -6,7 +6,9 @@ import com.elearning.External.VideoExternalService.ApiVideoUtils;
 import com.elearning.External.VideoExternalService.Exceptions.ApiVideoException;
 import com.elearning.Videos.VideoService;
 import com.elearning.Videos.temporaryName.ItemporaryNameService;
+import com.elearning.entities.video.EnVideoStatus;
 import com.elearning.entities.video.Video;
+import com.elearning.entities.video.VideoStatus;
 import com.elearning.webhook.apiVideo.interfaces.IvideoEncodedWebhookHandler;
 import com.elearning.webhook.apiVideo.interfaces.VideoInitializationLock;
 import com.elearning.webhook.apiVideo.models.VideoHookQualityEvent;
@@ -69,10 +71,14 @@ public class VideoQualityHookHandlerImpl implements IvideoEncodedWebhookHandler 
                 {
                     return;
                 }else {
+
                     // should acquire lock to avoid double api call or double video write
                     var updatePayload = new VideoUpdatePayload();
                     updatePayload.setPublic(false);
                     vid = apiVideoUtils.rateLimitRetry(() -> apiVideoService.updateVideo(event.videoId(),updatePayload));
+                    var vidStat = apiVideoUtils.rateLimitRetry(() -> apiVideoService.getVideoStatus(event.videoId()));
+                    vidStat.setStatus(EnVideoStatus.READY);
+                    vid.setVideoStatus(vidStat);
                     // get original name and owner
                     var orgName = itemporaryNameService.getOrignalFileName(vid.getTitle());
                     vid.setVideoOwner(userJpaRepo.getReferenceById(orgName.usrId()));

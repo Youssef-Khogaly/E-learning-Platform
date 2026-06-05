@@ -73,7 +73,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(@NonNull HttpServletRequest request) {
-
+        String token = request.getHeader(ApplicationConstants.JWT_HEADER_NAME);
+        if(token != null && !token.isBlank())
+            return false;
         for(PathPatternRequestMatcher matcher : skipValidationMatchersList){
             if(matcher.matches(request))
                 return true;

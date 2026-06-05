@@ -38,7 +38,7 @@ public class LessonController {
 
         var lesson = lessonService.create(courseId,sectionId,request.title(),request.index(),request.isPreview(),request.type());
         URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri()
-                .path("/{id}").buildAndExpand(lesson.getId()).toUri();
+                .path("/"+lesson.getId()).buildAndExpand(lesson.getId()).toUri();
         return ResponseEntity.created(uri).build();
     }
     @PutMapping("/{courseId}/sections/{sectionId}/lessons/{lessonId}")

@@ -68,7 +68,7 @@ create table videos(
                        createAt timestamp,
                        updateAt timestamp,
                        metaData json,
-                       status enum('uploading','uploaded','processing','ready') not null ,
+                       status ENUM('uploading', 'UPLOADED', 'PROCESSING', 'READY') not null ,
                        fileSize integer ,
                        isPlayable boolean,
                        width integer,
@@ -89,7 +89,7 @@ drop table if exists video_encoded_qualities;
 
 create table video_encoded_qualities(
                                         videoId varchar(32) not null ,
-                                        quality enum('240p','360p','480p','720p','1080p','2160p') not null ,
+                                        quality enum('_240p','_360p','_480p','_720p','_1080p','-2160p') not null ,
                                         primary key (videoId,quality),
                                         constraint video foreign key(videoId) references videos(id)
 );
@@ -131,8 +131,8 @@ create table payments(
                          method enum('STRIPE') not null,
                          status enum('EXPIRED','FAILED','PENDING','SUCCESS') not null,
                          course_id bigint not null ,
-                         transaction_id varchar(64),
-                         session_id varchar(64) unique not null ,
+                         transaction_id varchar(255),
+                         session_id varchar(255) unique not null ,
                          paidAt bigint null ,
                          createdAt TIMESTAMP,
                          constraint usrPayment foreign key (userId) references users(id)

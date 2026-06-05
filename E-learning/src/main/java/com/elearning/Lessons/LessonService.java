@@ -66,11 +66,8 @@ public class LessonService {
         var course = section.getCourse();
         if(course.getId() != courseId)
             throw new NotFoundException("section with Id:" + sectionId +" not found in course with Id:" + courseId);
-        // current user
-        User currUsr = new User();
-        currUsr.setId(2L);
 
-        if(courseAuthorization.canWrite(currUsr,course)){
+        if(courseAuthorization.canWrite(course)){
            var lesson = new Lesson();
            lesson.setSection(section);
            lesson.setIndex(index);

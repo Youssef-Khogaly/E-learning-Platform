@@ -40,7 +40,7 @@ public class StripeWebhookController {
         try {
             paymentWebhookPublisher.publish(event);
         } catch (RejectedExecutionException e) {
-            ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).build();
+            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).build();
         }
 
         return ResponseEntity.ok().build();

@@ -5,6 +5,7 @@ import com.elearning.LessonContent.Requests.PutContentReq;
 import com.elearning.LessonContent.dto.LessonContentDto;
 import com.elearning.LessonContent.dto.TxtContentDto;
 import com.elearning.LessonContent.dto.VideoContentDto;
+import com.elearning.Lessons.LessonAuthService;
 import com.elearning.Lessons.LessonType;
 import com.elearning.External.VideoExternalService.ApiVideoUtils;
 import com.elearning.Videos.VideoService;
@@ -16,12 +17,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-@RestController("/courses")
+@RestController
+@RequestMapping("/courses")
 @AllArgsConstructor
 @Validated
 public class LessonContentController {
 
     private final LessonContentService lessonContentService;
+    private final LessonAuthService lessonAuthService;
     private final VideoService videoService;
     private final ApiVideoUtils apiVideoUtils;
     @GetMapping("/{courseId}/sections/{sectionId}/lessons/{lessonId}/content")
@@ -37,10 +40,14 @@ public class LessonContentController {
         else if(lessonContent.getLesson().getType() == LessonType.VIDEO)
         {
             var vid = lessonContent.getVideo();
-            var assets = apiVideoUtils.rateLimitRetry(() -> videoService.getVideoAssets(vid));
-            content = VideoContentDto.builder().isPlayable(vid.getVideoStatus().getIsPlayable())
+            if(vid != null)
+            {
+                var assets = apiVideoUtils.rateLimitRetry(() -> videoService.getVideoAssets(vid));
+                content = VideoContentDto.builder().isPlayable(vid.getVideoStatus().getIsPlayable())
                         .qualities(vid.getVideoStatus().getEncodedQualities())
                         .assets(assets).build();
+            }
+
         }else {
             throw new RuntimeException("Unexpected lesson type");
         }
@@ -57,7 +64,7 @@ public class LessonContentController {
     public ResponseEntity<Void>putContent(@PathVariable @NotNull @Positive Long courseId ,
                                           @PathVariable @NotNull @Positive Long sectionId ,
                                           @PathVariable @NotNull @Positive Long lessonId,
-                                          @Valid PutContentReq req
+                                          @RequestBody @Valid PutContentReq req
                                           )
     {
         if(req.type() == LessonType.TXT)

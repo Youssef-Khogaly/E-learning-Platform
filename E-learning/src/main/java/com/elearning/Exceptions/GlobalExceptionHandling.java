@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -59,7 +60,8 @@ public class GlobalExceptionHandling {
         return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).header("Retry-After", String.valueOf(exception.getRetryAfterInSeconds())).body(err);
     }
 
-    @ExceptionHandler(exception = {UnAllowedStateTransitionException.class, BadRequestException.class, NotAllowedOperation.class , MethodArgumentNotValidException.class})
+    @ExceptionHandler(exception = {UnAllowedStateTransitionException.class, BadRequestException.class,
+            NotAllowedOperation.class , MethodArgumentNotValidException.class, HttpMessageNotReadableException.class})
     public ResponseEntity<?> badRequest(Exception exception , HttpServletRequest req)
     {
         var err  = ErrorResponse.builder().status(HttpStatus.BAD_REQUEST)

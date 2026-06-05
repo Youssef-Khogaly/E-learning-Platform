@@ -9,7 +9,9 @@ import com.elearning.External.PaymentGateWayExternal.Model.PaymentGatewayOrderMo
 import com.elearning.External.PaymentGateWayExternal.Model.PaymentSession;
 import com.elearning.External.PaymentGateWayExternal.Model.SessionGenerationCommand;
 import com.elearning.External.PaymentGateWayExternal.PaymentGatewayUtils;
+import com.elearning.Security.CurrentUserDetails;
 import com.elearning.UserEnroll.IUserEnrollmentService;
+import com.elearning.Users.UserJpaRepo;
 import com.elearning.Videos.EnSortDir;
 import com.elearning.entities.users.User;
 import com.elearning.payment.dto.PaymentSessionDto;
@@ -33,6 +35,7 @@ public class PaymentService implements PaymentSessionService , PurchaseEligibili
     private final IUserEnrollmentService userEnrollmentService;
     private final GeneratePaymentSessionFactory paymentSessionFactory;
     private final PaymentGatewayUtils paymentGatewayUtils;
+    private final UserJpaRepo userJpaRepo;
     public final Page<Payment> getPurchaseHistory(long userId, int pageSize, int page, EnPaymentSoryBy enSortBy , EnSortDir dir){
 
         Sort sort = Sort.by(dir.toDirection(),enSortBy.toString());
@@ -47,15 +50,15 @@ public class PaymentService implements PaymentSessionService , PurchaseEligibili
     }
 
     @Override
-    public boolean canBuy(User user, Course course) {
+    public boolean canBuy(CurrentUserDetails user, Course course) {
         if(course.getInstructor().getId().equals(user.getId()))
             return false;
         return course.getState() == CourseState.PUBLISHED && !userEnrollmentService.isEnrolled(user.getId(), course.getId());
     }
 
-    public Payment create(User user ,Course course,PaymentMethod method ,Money totalAmount , PaymentStatus status){
+    public Payment create(CurrentUserDetails user ,Course course,PaymentMethod method ,Money totalAmount , PaymentStatus status){
         var payment = new Payment();
-        payment.setUser(user);
+        payment.setUser(userJpaRepo.getReferenceById(user.getId()));
         payment.setCourse(course);
         payment.setMethod(method);
         payment.setTotalAmount(totalAmount);
@@ -64,7 +67,7 @@ public class PaymentService implements PaymentSessionService , PurchaseEligibili
         return payment;
     }
 
-    private PaymentGatewayOrderModel toOrderModel(User user,Course course)
+    private PaymentGatewayOrderModel toOrderModel(CurrentUserDetails user,Course course)
     {
         var item = PaymentGatewayLineItem.builder().
                 itemName(course.getTitle()).
@@ -84,7 +87,7 @@ public class PaymentService implements PaymentSessionService , PurchaseEligibili
 
     }
     @Override
-    public PaymentSessionDto createPaymentSession(User user, Course course, PaymentMethod method) {
+    public PaymentSessionDto createPaymentSession(CurrentUserDetails user, Course course, PaymentMethod method) {
         if(!canBuy(user,course))
             throw new BadRequestException("User is not allowed to buy this course");
 
@@ -93,7 +96,7 @@ public class PaymentService implements PaymentSessionService , PurchaseEligibili
         SessionGenerationCommand command = SessionGenerationCommand.builder()
                 .orderModel(toOrderModel(user,course))
                 .expireAfter(Duration.ofHours(2L))
-                .successUrl(null)
+                .successUrl("https://www.google.com")
                 .failUrl(null).
                 method(method)
                 .build();

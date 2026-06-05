@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 public enum     EnVideoStatus {
-    UPLOADING("uploading"),UPLOADED("uploaded" ),PROCESSING("processing"),READY("ready");
+    UPLOADING("UPLOADING"),UPLOADED("UPLOADED" ),PROCESSING("PROCESSING"),READY("READY");
     private final String str;
 
     EnVideoStatus(String str) {
@@ -13,4 +13,8 @@ public enum     EnVideoStatus {
         this.str = str;
     }
 
+    @Override
+    public String toString() {
+        return str;
+    }
 }

@@ -3,10 +3,12 @@ package com.elearning.UserEnroll;
 import com.elearning.entities.UserEnrollment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
+import java.time.Instant;
 import java.util.Optional;
 
 public interface UserEnrollmentJpaRepo extends JpaRepository<UserEnrollment,Long> {
@@ -19,8 +21,12 @@ public interface UserEnrollmentJpaRepo extends JpaRepository<UserEnrollment,Long
     boolean hasAnyEnroll(Long courseId);
 
     @Modifying
-    @Query(value = "insert  into enrollments (usrId,courseId) values (:usrId,:courseId)" , nativeQuery = true)
-    void enroll(Long usrId , Long courseId);
+    @Query(value = "insert  into enrollments (usrId,courseId,enrollDate) values (:usrId,:courseId,:enrollDate)" , nativeQuery = true)
+    void enroll(Long usrId , Long courseId, Instant enrollDate);
 
+    @EntityGraph(
+            attributePaths = {},
+            type = EntityGraph.EntityGraphType.FETCH
+    )
     Optional<UserEnrollment> findByUser_IdAndCourse_Id(Long userId, Long courseId);
 }

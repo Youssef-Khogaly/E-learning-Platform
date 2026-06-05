@@ -9,6 +9,7 @@ import com.elearning.Security.services.AuthenticationService;
 import com.elearning.UserEnroll.UserEnrollmentService;
 import com.elearning.Videos.VideoService;
 import com.elearning.entities.LessonContent;
+import com.elearning.entities.UserEnrollment;
 import com.elearning.entities.users.User;
 import com.elearning.entities.users.UserRoles;
 import lombok.AllArgsConstructor;
@@ -28,7 +29,7 @@ public class LessonContentService {
     private final VideoService videoService;
     private final LessonStateValidator lessonStateValidator;
     private final int READING_SPEED = 100;
-    // it fetch lesson, section, course together
+    // it fetches lesson, section, course together
     public LessonContent getContentOrThrow(long courseId,long sectionId,long lessonId)
     {
         return lessonContentRepo.findByIdAndLessonAndCourse(courseId,sectionId,lessonId).orElseThrow(() -> new NotFoundException("Lesson is not found"));
@@ -36,15 +37,18 @@ public class LessonContentService {
     @Transactional(readOnly = true)
     public LessonContent findByIdAndCourseIdAndSectionId(long courseId,long sectionId,long lessonId)
     {
-        var lesson = lessonService.getLessonOrThrow(courseId,sectionId,lessonId);
+        var content = getContentOrThrow(courseId,sectionId,lessonId);
+        var course = content.getLesson().getSection().getCourse();
+        var lesson = content.getLesson();
         var currentUser = AuthenticationService.getCurrentUser();
-        boolean canAccess = currentUser.isPresent() && lessonAuthService.canRead(lesson.getSection().getCourse(),lesson,userEnrollmentService.findByUserAndCourse(currentUser.get().getId(), courseId).orElse(null));
+        boolean canAccess = currentUser.isPresent() && lessonAuthService.canRead(course,lesson,userEnrollmentService.findByUserAndCourse(currentUser.get().getId(), courseId).orElse(null));
         if(!canAccess)
         {
             throw new UnAuthorizedException("Not Authorized");
         }
         return lessonContentRepo.findById(lessonId).orElseThrow(() -> new NotFoundException("Lesson not found") );
     }
+
     @Transactional
     public void updateVideoContent(final long courseId,final long sectionId,final long lessonId,final String videoId)
     {

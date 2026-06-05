@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.concurrent.RejectedExecutionException;
 
 @RestController
-@RequestMapping("/api/webhooks/")
+@RequestMapping("/api/webhooks")
 @AllArgsConstructor
 public class ApiVideoController {
 

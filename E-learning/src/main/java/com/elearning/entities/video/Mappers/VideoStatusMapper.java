@@ -33,7 +33,7 @@ public class VideoStatusMapper {
                 .status(s).fileSize(status.getIngest().getFilesize())
                 .isPlayable(status.getEncoding().getPlayable())
                 .encodedQualities(status.getEncoding().getQualities()
-                        .stream().filter(q -> q.getStatus() == Quality.StatusEnum.ENCODED).map(q -> EnQuality.valueOf(q.getQuality().toString())).collect(Collectors.toSet()))
+                        .stream().filter(q -> q.getStatus() == Quality.StatusEnum.ENCODED).map(q -> EnQuality.from(q.getQuality())).collect(Collectors.toSet()))
                 .techMetaData(technicalMetaDataMapper.from(status.getEncoding().getMetadata())).build();
     }
 }

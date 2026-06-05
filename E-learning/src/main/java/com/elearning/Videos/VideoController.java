@@ -41,7 +41,10 @@ public class VideoController {
     @PostMapping("/tmp-name")
     public ResponseEntity<Map<String,String>>generateTemporaryFileName(@RequestParam("n") String orgFileName)
     {
-        String tempName = itemporaryNameService.generateTempName(new GenerateTemporaryNameCommand(orgFileName,"1"));
+        var currentUser = AuthenticationService.getCurrentUser();
+        if(currentUser.isEmpty())
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        String tempName = itemporaryNameService.generateTempName(new GenerateTemporaryNameCommand(orgFileName,currentUser.get().getId().toString()));
 
         return ResponseEntity.ok(Map.of("temporaryFileName",tempName));
     }

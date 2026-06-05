@@ -8,6 +8,7 @@ import java.time.Instant;
 
 @AllArgsConstructor
 @Builder
+@Getter
 public class PaymentSessionDto{
     private final String session_id;
     private final String session_url;

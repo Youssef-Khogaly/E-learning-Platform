@@ -34,16 +34,22 @@ public class SecurityConfigTest {
                 .authorizeHttpRequests(
                         (requests) ->
                                 requests
-                                        // courses config
-                                        .requestMatchers(HttpMethod.POST,"/courses/**").hasRole(UserRoles.Instructor.toString())
-                                        .requestMatchers(HttpMethod.PUT,"/courses/**").hasRole(UserRoles.Instructor.toString())
-                                        .requestMatchers(HttpMethod.DELETE,"/courses/**").hasRole(UserRoles.Instructor.toString())
+
+                                        // lesson content
+                                        .requestMatchers(HttpMethod.GET,"/courses/*/sections/*/lessons/*/content").authenticated()
+                                        .requestMatchers(HttpMethod.PUT,"/courses/*/sections/*/lessons/*/content").hasRole(UserRoles.Instructor.toString())
+
                                         // instructor courses
                                         .requestMatchers(HttpMethod.GET,"/courses/mine/**").hasRole(UserRoles.Instructor.toString())
                                         .requestMatchers(HttpMethod.GET,"courses/enrolled/*").authenticated()
 
-                                        // lesson content
-                                        .requestMatchers(HttpMethod.GET,"/courses/*/sections/*/lessons/*/content").authenticated()
+                                        // courses config
+                                        .requestMatchers(HttpMethod.POST,"/courses/**").hasRole(UserRoles.Instructor.toString())
+                                        .requestMatchers(HttpMethod.PUT,"/courses/**").hasRole(UserRoles.Instructor.toString())
+                                        .requestMatchers(HttpMethod.DELETE,"/courses/**").hasRole(UserRoles.Instructor.toString())
+
+
+
                                         // payments
                                         .requestMatchers("/payment/**").authenticated()
 

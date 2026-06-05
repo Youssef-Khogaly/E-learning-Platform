@@ -67,6 +67,7 @@ public class SecurityConfigProd {
 
                                         // lesson content
                                         .requestMatchers(HttpMethod.GET,"/courses/*/sections/*/lessons/*/content").authenticated()
+                                        .requestMatchers(HttpMethod.PUT,"/courses/*/sections/*/lessons/*/content").hasRole(UserRoles.Instructor.toString())
                                         // payments
                                         .requestMatchers("/payment/**").authenticated()
 
