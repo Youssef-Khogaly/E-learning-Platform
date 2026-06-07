@@ -51,6 +51,8 @@ E-learning platform built with Java and the Spring Boot framework. It provides  
     StripeWhsec=whsec_your_stripe_webhook_secret
     api.video.test.apiKey=your_api_video_key
     api.video.enviroment=SANDBOX # or PRODUCTION
+    
+    video.fileGeneration.secret=  AES-128 secret key used to generate temporary name
     ```
 
 3.  Create the database environment file at `DB-init/db-sql.env`:
